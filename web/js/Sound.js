@@ -14,6 +14,8 @@ var Sound = {
 	// Load an audio file.
 	load: function(uri){
 		var audio = new Audio();
+		audio.src = uri;
+
 		return audio;
 	}
 };
