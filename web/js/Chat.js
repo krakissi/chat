@@ -7,6 +7,7 @@ var Chat = {
 	truncate: false,
 	truncate_length: 15000,
 
+	last: undefined,
 	timeout: undefined,
 
 	// Poll for updates. Schedules a timeout.
@@ -16,7 +17,12 @@ var Chat = {
 		var http = new XMLHttpRequest();
 
 		// TODO: Implement a backend to connect with first.
-		console.log('polling');
+		Ajax.get({
+			target:'bin/chat.cgi?t='+this.last.last,
+			success:function(e){
+				this.last = JSON.parse(e.responseText.trim());
+			},
+		});
 
 		this.timeout = setTimeout('Chat.get()', this.delay);
 	},
@@ -28,6 +34,10 @@ var Chat = {
 
 	init: function(){
 		clearTimeout(this.timeout);
+
+		this.last = {
+			last: 'never',
+		};
 
 		// Start polling indefinitely.
 		this.get();
