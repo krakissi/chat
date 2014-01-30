@@ -1,0 +1,17 @@
+CREATE TABLE log (
+	timestamp DEFAULT CURRENT_TIMESTAMP,
+	remote_addr VARCHAR,
+	user VARCHAR NOT NULL,
+	message VARCHAR NOT NULL
+);
+
+CREATE TABLE userprefs (
+	user VARCHAR NOT NULL,
+	id_pref INTEGER NOT NULL,
+	value VARCHAR
+);
+
+CREATE TABLE prefs (
+	id_pref INTEGER PRIMARY KEY AUTOINCREMENT,
+	desc VARCHAR NOT NULL
+);
