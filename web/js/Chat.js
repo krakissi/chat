@@ -10,33 +10,64 @@ var Chat = {
 	last: undefined,
 	timeout: undefined,
 
+	lock: false,
+	lockout: undefined,
+	delay_lockout: 30000,
+
 	// Poll for updates. Schedules a timeout.
 	get: function(){
 		clearTimeout(this.timeout);
 
-		var http = new XMLHttpRequest();
+		if(!this.lock){
+			this.lock_set();	
 
-		// TODO: Implement a backend to connect with first.
-		Ajax.get({
-			target:'bin/chat.cgi?t='+this.last.last,
-			success:function(e){
-				this.last = JSON.parse(e.responseText.trim());
-			},
-		});
+			var http = new XMLHttpRequest();
+
+			Ajax.get({
+				target:'bin/chat.cgi?t='+this.last.last,
+				success:function(e){
+					Chat.last = JSON.parse(e.responseText.trim());
+
+					if(Chat.last.messages)
+						Chat.last.messages.forEach(function(msg){
+							Message.receive(msg);
+						});
+				},
+				completion:function(e){
+					Chat.lock = false;
+				}
+			});
+		} else {
+			console.log('Lost an update while locked');
+		}
 
 		this.timeout = setTimeout('Chat.get()', this.delay);
 	},
 
+	// Prevent queueing many requests.
+	lock_set: function(){
+		clearTimeout(this.lockout);
+		this.lock = true;
+		this.lockout = setTimeout('Chat.lock_free()', this.delay_lockout);
+	},
+
+	// Remove the lock.
+	lock_free: function(){
+		clearTimeout(this.lockout);
+		this.lock = false;
+	},
+
+
 	// Stops chat from updating.
 	freeze: function(){
 		clearTimeout(this.timeout);
+		this.lock_free();
 	},
 
 	init: function(){
-		clearTimeout(this.timeout);
-
+		this.freeze();
 		this.last = {
-			last: 'never',
+			last: 'never'
 		};
 
 		// Start polling indefinitely.

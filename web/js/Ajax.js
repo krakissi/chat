@@ -27,6 +27,9 @@ var Ajax = {
 						if(meta.unhandled)
 							meta.unhandled(http);
 				}
+
+				if(meta.completion)
+					meta.completion(http);
 			}
 		}
 
