@@ -7,13 +7,20 @@
 var Core = {
 	user: undefined,
 	modules: undefined,
+	initcomplete: undefined,
 
 	// Should be called body onload.
 	init: function(){
+		this.initcomplete = document.createEvent("HTMLEvents");
+		this.initcomplete.initEvent("initcomplete", true, true);
+		this.initcomplete.eventName = "initcomplete";
+
 		this.modules.forEach(function(mod){
 			if(mod.init)
 				mod.init();
 		});
+
+		document.dispatchEvent(this.initcomplete);
 	},
 
 	// Register objects with Core.
