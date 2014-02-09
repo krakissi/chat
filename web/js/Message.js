@@ -4,11 +4,17 @@
 var Message = {
 	name: "Message",
 	chatbody: undefined,
-	messageform: undefined,
+	message: undefined,
 
-	body: undefined,
 	send: function(){
-		this.messageform.submit();
+		var post = "message="+encodeURIComponent(this.message.value);
+		this.message.value = "";
+
+		Ajax.get({
+			method:'POST',
+			target:'bin/post.cgi',
+			post:post
+		});
 
 		return true;
 	},
@@ -24,12 +30,8 @@ var Message = {
 	},
 
 	init: function(){
-		this.body = {
-			message: undefined
-		}
-
 		this.chatbody = document.getElementById('chatbody');
-		this.messageform = document.forms["messageform"];
+		this.message = document.getElementById('message');
 	}
 };
 

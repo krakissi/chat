@@ -33,7 +33,7 @@ var Ajax = {
 			}
 		}
 
-		var post = (meta.method=="POST")?meta.post:undefined;
+		var post = (this.method=="POST")?meta.post:undefined;
 		http.open(this.method, this.target, true);
 		http.send(post);
 	},

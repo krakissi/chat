@@ -23,6 +23,6 @@ my $message = URI::Encode::uri_encode($postvalues{'message'}, "\0-\377");
 my $sql = qq/INSERT INTO log(user, remote_addr, message) VALUES('krakissi', '$ENV{'REMOTE_ADDR'}', '$message');/;
 qx/sqlite3 "$database" "$sql"/;
 
-printf "Status: 204 Received\n\n";
+printf "Status: 204 Received\nContent-Type: text/plain; charset=utf-8\n\nReceived\n";
 
 exit 0
