@@ -34,7 +34,7 @@ var Chat = {
 						});
 				},
 				completion:function(e){
-					Chat.lock = false;
+					Chat.lock_free();
 				}
 			});
 		} else {
