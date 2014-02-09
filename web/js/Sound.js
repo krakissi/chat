@@ -2,6 +2,8 @@
 	Handles chirps and mention noises.
 */
 var Sound = {
+	name: "Sound",
+
 	// Sounds
 	bloop: undefined,
 	horn: undefined,
@@ -23,9 +25,10 @@ var Sound = {
 	},
 
 	// Adjust volume attenuation.
-	atten: function(){
+	atten: function(bloop){
 		Sound.bloop.volume = Sound.horn.volume = Sound.chirp_vol.value;
-		Sound.bloop.play();
+		if(!(bloop === false))
+			Sound.bloop.play();
 	},
 
 	init: function(){
@@ -37,6 +40,11 @@ var Sound = {
 
 		this.chirp_mute.addEventListener("change", Sound.mute);
 		this.chirp_vol.addEventListener("change", Sound.atten);
+
+
+		// Sync sound settings with controls.
+		this.mute();
+		this.atten(false);
 	}
 };
 

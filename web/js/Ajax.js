@@ -17,7 +17,7 @@ var Ajax = {
 		this.target = meta.target;
 
 		http.onreadystatechange = (meta.onreadystatechange)?meta.onreadystatechange:function(){
-			if(http.readyState==4){
+			if(http.readyState === 4){
 				switch(http.status){
 					case 200:
 						if(meta.success)
@@ -33,7 +33,7 @@ var Ajax = {
 			}
 		}
 
-		var post = (this.method=="POST")?meta.post:undefined;
+		var post = (this.method === "POST")?meta.post:undefined;
 		http.open(this.method, this.target, true);
 		http.send(post);
 	},

@@ -27,7 +27,7 @@ var Message = {
 	receive: function(msg){
 		var locked = false;
 
-		if(Message.chatbody.scrollTop == (Message.chatbody.scrollHeight - Message.chatbody.offsetHeight))
+		if(Message.chatbody.scrollTop === (Message.chatbody.scrollHeight - Message.chatbody.offsetHeight))
 			locked = true;
 
 		if(msg.message){
@@ -45,7 +45,7 @@ var Message = {
 	keyhandler: function(event){
 		var key = event.keyCode || event.which;
 
-		if((!event.shiftKey) && (key == 13)){
+		if((!event.shiftKey) && (key === 13)){
 			switch(event.type){
 				case "keypress":
 					Message.send();
