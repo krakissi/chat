@@ -2,6 +2,7 @@ body {
 	color: white;
 	background-color: black;
 	font-family: "Ubuntu", sans-serif;
+	overflow: hidden;
 }
 
 #chatbody {
@@ -38,7 +39,7 @@ body {
 
 #controls {
 	font-size: 12px;
-	color: #ddd;
+	color: #707070;
 }
 
 #control_left {
@@ -59,4 +60,10 @@ body {
 	position: absolute;
 	bottom: 0px;
 	right: 0px;
+}
+
+#chirp_vol {
+	padding: 0px;
+	margin: -5px;
+	margin-right: 2.5px;
 }

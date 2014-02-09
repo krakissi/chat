@@ -28,10 +28,12 @@ var Chat = {
 				success:function(e){
 					Chat.last = JSON.parse(e.responseText.trim());
 
-					if(Chat.last.messages)
+					if(Chat.last.messages){
 						Chat.last.messages.forEach(function(msg){
 							Message.receive(msg);
 						});
+						Sound.bloop.play();
+					}
 				},
 				completion:function(e){
 					Chat.lock_free();
