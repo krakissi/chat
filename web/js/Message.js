@@ -63,6 +63,8 @@ var Message = {
 
 		this.message.onkeypress = this.keyhandler;
 		this.message.onkeyup = this.keyhandler;
+
+		this.message.focus();
 	}
 };
 

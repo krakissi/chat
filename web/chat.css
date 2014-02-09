@@ -10,7 +10,7 @@ body {
 	padding: 0 5px;
 
 	position: absolute;
-	bottom: 78px;
+	bottom: 74px;
 	right: 0px;
 	left: 0px;
 	top: 0px;
@@ -22,7 +22,7 @@ body {
 	box-sizing: border-box;
 
 	position: absolute;
-	bottom: 22px;
+	bottom: 18px;
 	height: 48px;
 	width: 100%;
 	left: 0px;
@@ -34,4 +34,29 @@ body {
 	border: 0;
 
 	resize: none;
+}
+
+#controls {
+	font-size: 12px;
+	color: #ddd;
+}
+
+#control_left {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+}
+
+#control_center {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+	text-align: center;
+}
+
+#control_right {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
 }
