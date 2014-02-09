@@ -27,7 +27,7 @@ my $sql = qq/SELECT timestamp,remote_addr,user,message FROM log/;
 my $last = $queryvals{'t'};
 
 if(length($last)==0 or $last eq "never"){ $sql .= ';' }
-else { $sql .=  qq/WHERE timestamp > '$last' ORDER BY timestamp asc;/ }
+else { $sql .=  qq/ WHERE timestamp > '$last' ORDER BY timestamp asc;/ }
 
 my $response = qx/sqlite3 "$database" "$sql"/;
 my @updateset = split('\n', $response);
@@ -35,19 +35,19 @@ my $output = "";
 
 foreach my $msg (@updateset){
 	my ($timestamp, $remote_addr, $user, $message) = split('\|', $msg, 4);
-	$output .= qq/{"timestamp":"$timestamp","remote_addr":"$remote_addr","user":"$user","message":"$message"},/;
+	$output .= qq/{"timestamp":"$timestamp","remote_addr":"$remote_addr","user":"$user","message":"$message"},\n/;
 	$last = $timestamp;
 }
 $output=qq/{"last":"$last","messages":[/.$output."{}]}";
 
 if($last eq $queryvals{'t'}){
-printf<<EOF;
+print<<EOF;
 Status: 204 No New Messages
 Content-Type: text/plain; charset=utf-8
 
 EOF
 } else {
-printf<<EOF;
+print<<EOF;
 Content-Type: application/json; charset=utf-8
 
 $output

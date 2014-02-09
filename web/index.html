@@ -14,6 +14,10 @@
 		Core.user = 'krakissi';
 	</script>
 </head><body onload="Core.init();">
+	<form method=post action=bin/post.cgi name=messageform>
+		<textarea name=message></textarea><br>
+		<input type=button value="Send" onclick="Message.send();">
+	</form>
 	<!-- Messages go here -->
 	<div id=chatbody></div>
 </body></html>
