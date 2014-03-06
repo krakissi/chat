@@ -20,8 +20,8 @@ var Sound = {
 	},
 	
 	// Mute sounds.
-	mute: function(){
-		Sound.bloop.muted = Sound.horn.muted = Sound.chirp_mute.checked;
+	mute: function(force){
+		Sound.bloop.muted = Sound.horn.muted = (force === true)?true:Sound.chirp_mute.checked;
 	},
 
 	// Adjust volume attenuation.
@@ -29,6 +29,12 @@ var Sound = {
 		Sound.bloop.volume = Sound.horn.volume = Sound.chirp_vol.value;
 		if(!(bloop === false))
 			Sound.bloop.play();
+	},
+
+	messagealert: function(){
+		if(Sound.bloop.muted === false)
+			Sound.bloop.play();
+		Sound.mute();
 	},
 
 	init: function(){
@@ -43,8 +49,11 @@ var Sound = {
 
 
 		// Sync sound settings with controls.
-		this.mute();
 		this.atten(false);
+		this.mute(true);
+
+		// Listen for new messages to bloop at.
+		document.addEventListener("Message_new", Sound.messagealert);
 	}
 };
 

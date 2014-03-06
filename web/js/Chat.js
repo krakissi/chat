@@ -9,6 +9,7 @@ var Chat = {
 
 	last: undefined,
 	timeout: undefined,
+	newmessage: undefined,
 
 	lock: false,
 	lockout: undefined,
@@ -32,7 +33,7 @@ var Chat = {
 						Chat.last.messages.forEach(function(msg){
 							Message.receive(msg);
 						});
-						Sound.bloop.play();
+						document.dispatchEvent(Chat.newmessage);
 					}
 				},
 				completion:function(e){
@@ -67,6 +68,10 @@ var Chat = {
 	},
 
 	init: function(){
+		this.newmessage = document.createEvent("HTMLEvents");
+		this.newmessage.initEvent("Message_new", true, true);
+		this.newmessage.eventName = "Message_new";
+
 		this.freeze();
 		this.last = {
 			last: 'never'
