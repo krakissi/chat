@@ -32,13 +32,23 @@ else { $sql .=  qq/ WHERE timestamp > '$last' ORDER BY timestamp asc;/ }
 my $response = qx/sqlite3 "$database" "$sql"/;
 my @updateset = split('\n', $response);
 my $output = "";
+my %users;
 
 foreach my $msg (@updateset){
 	my ($timestamp, $remote_addr, $user, $message) = split('\|', $msg, 4);
 	$output .= qq/{"timestamp":"$timestamp","remote_addr":"$remote_addr","user":"$user","message":"$message"},\n/;
 	$last = $timestamp;
+	$users{$user} = '';
 }
-$output=qq/{"last":"$last","messages":[/.$output."{}]}";
+
+my $userjson = "";
+my @userlist = keys %users;
+foreach my $user (@userlist){
+	my $color = "black";
+	$userjson .= qq/"$user":{"color":"$color"},\n/;
+}
+$userjson=~s/^(.*),$/\1/;
+$output=qq/{"last":"$last","messages":[/.$output.qq/{}],"userlist":{/.$userjson."}}";
 
 if($last eq $queryvals{'t'}){
 print<<EOF;
