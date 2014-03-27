@@ -68,4 +68,5 @@ var Message = {
 	}
 };
 
-Core.add(Message);
+if(Core)
+	Core.add(Message);

@@ -39,4 +39,5 @@ var Ajax = {
 	},
 };
 
-Core.add(Ajax);
+if(Core)
+	Core.add(Ajax);

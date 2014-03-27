@@ -57,4 +57,5 @@ var Sound = {
 	}
 };
 
-Core.add(Sound);
+if(Core)
+	Core.add(Sound);

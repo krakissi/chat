@@ -82,4 +82,5 @@ var Chat = {
 	},
 };
 
-Core.add(Chat);
+if(Core)
+	Core.add(Chat);

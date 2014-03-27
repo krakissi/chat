@@ -19,4 +19,5 @@ var Config = {
 	}
 };
 
-Core.add(Config);
+if(Core)
+	Core.add(Config);
