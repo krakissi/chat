@@ -60,11 +60,27 @@ var Chat = {
 		this.lock = false;
 	},
 
-
 	// Stops chat from updating.
 	freeze: function(){
 		clearTimeout(this.timeout);
 		this.lock_free();
+	},
+
+	// Toggle dates for each message's timestamp.
+	toggle_dates: function(override){
+		if(override === undefined)
+			override = this.hide_tsdate;
+		if(override === true){
+			// Show dates.
+			this.hide_tsdatess.innerHTML = '.timestamp .date { display: inherit; }';
+			this.hide_tsdate = false;
+		} else {
+			// Hide dates.
+			this.hide_tsdatess.innerHTML = '.timestamp .date { display: none; }';
+			this.hide_tsdate = true;
+		}
+
+		return this.hide_tsdate;
 	},
 
 	init: function(){
@@ -76,6 +92,15 @@ var Chat = {
 		this.last = {
 			last: 'never'
 		};
+
+		// Dynamic stylesheet configuration.
+		var sheet = document.createElement('style');
+		sheet.id = 'hide_timestamp_date_stylesheet';
+		document.body.appendChild(sheet);
+		this.hide_tsdatess = document.getElementById(sheet.id);
+
+		// Default to hiding dates.
+		this.toggle_dates(false);
 
 		// Start polling indefinitely.
 		this.get();

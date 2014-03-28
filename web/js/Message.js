@@ -32,7 +32,12 @@ var Message = {
 
 		if(msg.message){
 			msg.message = decodeURIComponent(msg.message);
-			this.chatbody.innerHTML +='<div><span class=timestamp>'+msg.timestamp
+			var tsparts = msg.timestamp.split(' ');
+			var tsdate = tsparts[0];
+			var tstime = tsparts[1];
+
+			this.chatbody.innerHTML +='<div><span class=timestamp><span class=date>'
+				+tsdate+'&nbsp;</span><span class=time>'+tstime+'</span>'
 				+'</span> <span class=user>'+msg.user+'</span>@<span class=remote_addr>'
 				+msg.remote_addr+'</span>: <span class=message>'+msg.message+'</span></div>';
 		}
