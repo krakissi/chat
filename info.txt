@@ -1,2 +1,3 @@
 # krakchat
 # Mike Perron (2014)
+title=sh/chat_title.sh
