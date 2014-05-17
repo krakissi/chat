@@ -25,8 +25,8 @@ var Chat = {
 			var http = new XMLHttpRequest();
 
 			Ajax.get({
-				target:'bin/chat.cgi?t='+this.last.last,
-				success:function(e){
+				target: 'bin/chat.cgi?t=' + this.last.last,
+				success: function(e){
 					Chat.last = JSON.parse(e.responseText.trim());
 
 					if(Chat.last.messages){
@@ -36,7 +36,7 @@ var Chat = {
 						document.dispatchEvent(Chat.newmessage);
 					}
 				},
-				completion:function(e){
+				completion: function(e){
 					Chat.lock_free();
 				}
 			});

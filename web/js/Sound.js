@@ -21,7 +21,7 @@ var Sound = {
 	
 	// Mute sounds.
 	mute: function(force){
-		Sound.bloop.muted = Sound.horn.muted = (force === true)?true:Sound.chirp_mute.checked;
+		Sound.bloop.muted = Sound.horn.muted = (force === true) ? true : Sound.chirp_mute.checked;
 	},
 
 	// Adjust volume attenuation.
