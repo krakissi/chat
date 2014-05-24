@@ -18,7 +18,9 @@ if(length($buffer)>0){
 		$postvalues{$name} = $value;
 	}
 }
-my $message = URI::Encode::uri_encode($postvalues{'message'}, "\0-\377");
+my $message = $postvalues{'message'};
+$message =~ s/</&lt;/g;
+$message = URI::Encode::uri_encode($message, "\0-\377");
 
 my $ip = $ENV{'HTTP_X_FORWARDED_FOR'} // $ENV{'REMOTE_ADDR'} // "unknown";
 $ip =~ s/\//\/\//g;

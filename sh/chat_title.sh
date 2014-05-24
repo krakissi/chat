@@ -65,6 +65,7 @@ titles=(
 	"Krakchat (BBPLS is my New Backend)"
 	"Krakchat (Because I haven't finished Krakden)"
 	"Krakchat (I actually ported it!)"
+	"Krakchat (Russell, honey ...)"
 )
 pick=$RANDOM
 let "pick %= ${#titles[@]}"
