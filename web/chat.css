@@ -75,6 +75,7 @@ a:hover {
 }
 
 .scriptonlylink {
+	text-decoration: underline;
 	cursor: pointer;
 }
 
