@@ -14,8 +14,8 @@ my $database = "chat.db";
 
 my %queryvals;
 my $buffer = $ENV{QUERY_STRING};
-if(length($buffer)>0){
-	my @pairs=split(/[;&]/, $buffer);
+if(length($buffer) > 0){
+	my @pairs = split(/[;&]/, $buffer);
 	foreach my $pair (@pairs){
 		my ($name, $value) = split(/=/, $pair);
 		$value =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
@@ -26,8 +26,7 @@ if(length($buffer)>0){
 my $sql = qq/SELECT datetime(timestamp, "localtime") as timestamp_display, remote_addr, user, message FROM log/;
 my $last = $queryvals{t};
 
-if((length($last) == 0) or ($last eq "never")){ $sql .= ';' }
-else { $sql .=  qq/ WHERE timestamp_display > "$last" ORDER BY timestamp asc;/ }
+$sql .= ((length($last) == 0) or ($last eq "never")) ? ';' : qq/ WHERE timestamp_display > "$last" ORDER BY timestamp asc;/;
 
 my $response = qx/sqlite3 '$database' '$sql'/;
 my @updateset = split('\n', $response);
@@ -50,7 +49,7 @@ foreach my $msg (@updateset){
 my $userjson = "";
 my @userlist = keys %users;
 foreach my $user (@userlist){
-	my $color = "#f023f0";
+	my $color = "#a0a0a0";
 
 	$sql = qq/SELECT value FROM userprefs WHERE id_pref=(SELECT id_pref FROM prefs WHERE desc="color") AND user="$user";/;
 	$response = qx/sqlite3 '$database' '$sql'/;
