@@ -26,12 +26,15 @@ if(length($buffer) > 0){
 my $sql = qq/SELECT datetime(timestamp, "localtime") as timestamp_display, remote_addr, user, message FROM log/;
 my $last = $queryvals{t};
 
-$sql .= ((length($last) == 0) or ($last eq "never")) ? ';' : qq/ WHERE timestamp_display > "$last" ORDER BY timestamp asc;/;
+$sql .= ((length($last) == 0) or ($last eq "never")) ? ' ORDER BY timestamp DESC LIMIT 1500;' : qq/ WHERE timestamp_display > "$last" ORDER BY timestamp DESC;/;
 
 my $response = qx/sqlite3 '$database' '$sql'/;
 my @updateset = split('\n', $response);
 my $output = "";
 my %users;
+
+# Updates are retrieved in reverse order, so we need to flip the list.
+@updateset = reverse @updateset;
 
 foreach my $msg (@updateset){
 	my ($timestamp, $remote_addr, $user, $message) = split('\|', $msg, 4);
