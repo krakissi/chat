@@ -62,7 +62,7 @@ var Message = {
 				+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
 				+ '</span> <span class=user_brackets style="color: ' + msg.ipcolor
 				+ ';">[<span class=user style="color: ' + usercolor + ';">' + msg.user
-				+ '</span>]</span>: <span class=message>'
+				+ '</span>]</span> <span class=message>'
 				+ msg.message + '</span></div>';
 		}
 
