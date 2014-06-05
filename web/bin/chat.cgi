@@ -13,7 +13,7 @@ chdir($homepath);
 my $database = "chat.db";
 
 my %queryvals;
-my $buffer = $ENV{'QUERY_STRING'};
+my $buffer = $ENV{QUERY_STRING};
 if(length($buffer)>0){
 	my @pairs=split(/[;&]/, $buffer);
 	foreach my $pair (@pairs){
@@ -24,19 +24,19 @@ if(length($buffer)>0){
 }
 
 my $sql = qq/SELECT timestamp,remote_addr,user,message FROM log/;
-my $last = $queryvals{'t'};
+my $last = $queryvals{t};
 
-if(length($last)==0 or $last eq "never"){ $sql .= ';' }
-else { $sql .=  qq/ WHERE timestamp > '$last' ORDER BY timestamp asc;/ }
+if((length($last) == 0) or ($last eq "never")){ $sql .= ';' }
+else { $sql .=  qq/ WHERE timestamp > "$last" ORDER BY timestamp asc;/ }
 
-my $response = qx/sqlite3 "$database" "$sql"/;
+my $response = qx/sqlite3 '$database' '$sql'/;
 my @updateset = split('\n', $response);
 my $output = "";
 my %users;
 
 foreach my $msg (@updateset){
 	my ($timestamp, $remote_addr, $user, $message) = split('\|', $msg, 4);
-	$output .= qq/{"timestamp":"$timestamp","remote_addr":"$remote_addr","user":"$user","message":"$message"},\n/;
+	$output .= qq/{"timestamp": "$timestamp", "remote_addr": "$remote_addr", "user": "$user", "message": "$message"},\n/;
 	$last = $timestamp;
 	$users{$user} = '';
 }
@@ -45,12 +45,12 @@ my $userjson = "";
 my @userlist = keys %users;
 foreach my $user (@userlist){
 	my $color = "black";
-	$userjson .= qq/"$user":{"color":"$color"},\n/;
+	$userjson .= qq/"$user": {"color": "$color"},\n/;
 }
-$userjson=~s/^(.*),$/\1/;
-$output=qq/{"last":"$last","messages":[/.$output.qq/{}],"userlist":{/.$userjson."}}";
+$userjson =~ s/^(.*),$/\1/;
+$output = qq/{"last": "$last", "messages": [$output {}], "userlist": {$userjson}}/;
 
-if($last eq $queryvals{'t'}){
+if($last eq $queryvals{t}){
 print<<EOF;
 Status: 204 No New Messages
 Content-Type: text/plain; charset=utf-8
