@@ -79,3 +79,7 @@ a:hover {
 	margin: -5px;
 	margin-right: 2.5px;
 }
+
+.user_brackets {
+	font-weight: bold;
+}

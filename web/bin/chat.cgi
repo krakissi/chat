@@ -51,7 +51,17 @@ my $userjson = "";
 my @userlist = keys %users;
 foreach my $user (@userlist){
 	my $color = "#f023f0";
-	$userjson .= qq/"$user": {"color": "$color"},\n/;
+
+	$sql = qq/SELECT value FROM userprefs WHERE id_pref=(SELECT id_pref FROM prefs WHERE desc="color") AND user="$user";/;
+	$response = qx/sqlite3 '$database' '$sql'/;
+	if($? == 0){
+		chomp($response);
+		if(length($response) > 0){
+			$color = "#$response";
+		}
+	}
+
+	$userjson .= qq/"$user": {"color": "$color"},/;
 }
 $userjson =~ s/^(.*),$/\1/;
 $output = qq/{"last": "$last", "messages": [$output {}], "userlist": {$userjson}}/;

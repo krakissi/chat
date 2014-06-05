@@ -15,3 +15,5 @@ CREATE TABLE prefs (
 	id_pref INTEGER PRIMARY KEY AUTOINCREMENT,
 	desc VARCHAR NOT NULL
 );
+
+INSERT INTO prefs(desc) VALUES('color');
