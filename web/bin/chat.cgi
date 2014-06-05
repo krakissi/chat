@@ -23,7 +23,7 @@ if(length($buffer)>0){
 	}
 }
 
-my $sql = qq/SELECT timestamp,remote_addr,user,message FROM log/;
+my $sql = qq/SELECT datetime(timestamp, "localtime") as timestamp, remote_addr, user, message FROM log/;
 my $last = $queryvals{t};
 
 if((length($last) == 0) or ($last eq "never")){ $sql .= ';' }
@@ -36,7 +36,13 @@ my %users;
 
 foreach my $msg (@updateset){
 	my ($timestamp, $remote_addr, $user, $message) = split('\|', $msg, 4);
-	$output .= qq/{"timestamp": "$timestamp", "remote_addr": "$remote_addr", "user": "$user", "message": "$message"},\n/;
+
+	my $ipcolor = "#ffffff";
+	if($remote_addr =~ /[0-9]*\.([0-9]*)\.([0-9]*)\.([0-9]*)/){
+		$ipcolor = sprintf("#%02x%02x%02x", $1, $2, $3);
+	}
+
+	$output .= qq/{"timestamp": "$timestamp", "ipcolor": "$ipcolor", "user": "$user", "message": "$message"},\n/;
 	$last = $timestamp;
 	$users{$user} = '';
 }
@@ -44,7 +50,7 @@ foreach my $msg (@updateset){
 my $userjson = "";
 my @userlist = keys %users;
 foreach my $user (@userlist){
-	my $color = "black";
+	my $color = "#f023f0";
 	$userjson .= qq/"$user": {"color": "$color"},\n/;
 }
 $userjson =~ s/^(.*),$/\1/;

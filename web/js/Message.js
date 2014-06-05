@@ -36,10 +36,16 @@ var Message = {
 			var tsdate = tsparts[0];
 			var tstime = tsparts[1];
 
+			var usercolor = Chat.last.userlist[msg.user].color;
+			if(!usercolor)
+				usercolor = 'white';
+
 			this.chatbody.innerHTML += '<div><span class=timestamp><span class=date>'
 				+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
-				+ '</span> <span class=user>' + msg.user + '</span>@<span class=remote_addr>'
-				+ msg.remote_addr + '</span>: <span class=message>' + msg.message + '</span></div>';
+				+ '</span> <span class=user_brackets style="color: ' + msg.ipcolor
+				+ ';">[<span class=user style="color: ' + usercolor + ';">' + msg.user
+				+ '</span>]</span>: <span class=message>'
+				+ msg.message + '</span></div>';
 		}
 
 		if(locked)
