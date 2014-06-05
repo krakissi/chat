@@ -23,11 +23,11 @@ if(length($buffer)>0){
 	}
 }
 
-my $sql = qq/SELECT datetime(timestamp, "localtime") as timestamp, remote_addr, user, message FROM log/;
+my $sql = qq/SELECT datetime(timestamp, "localtime") as timestamp_display, remote_addr, user, message FROM log/;
 my $last = $queryvals{t};
 
 if((length($last) == 0) or ($last eq "never")){ $sql .= ';' }
-else { $sql .=  qq/ WHERE timestamp > "$last" ORDER BY timestamp asc;/ }
+else { $sql .=  qq/ WHERE timestamp_display > "$last" ORDER BY timestamp asc;/ }
 
 my $response = qx/sqlite3 '$database' '$sql'/;
 my @updateset = split('\n', $response);
