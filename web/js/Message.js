@@ -23,6 +23,24 @@ var Message = {
 		return true;
 	},
 
+	// Convert from 24-hour to 12-hour AM/PM time.
+	time24to12: function(date){
+		var date_parts = date.split(':');
+		var h = date_parts[0];
+		var m = date_parts[1];
+		var s = date_parts[2];
+		var ap = "am";
+
+		if(h >= 12){
+			h %= 12;
+			ap = "pm";
+		}
+		if(!h)
+			h = 12;
+
+		return h + ':' + m + ':' + s + ' ' + ap;
+	},
+
 	// Write a received message out to the chatbody div.
 	receive: function(msg){
 		var locked = false;
@@ -41,7 +59,7 @@ var Message = {
 				usercolor = 'white';
 
 			this.chatbody.innerHTML += '<div><span class=timestamp><span class=date>'
-				+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
+				+ tsdate + '&nbsp;</span><span class=time>' + this.time24to12(tstime) + '</span>'
 				+ '</span> <span class=user_brackets style="color: ' + msg.ipcolor
 				+ ';">[<span class=user style="color: ' + usercolor + ';">' + msg.user
 				+ '</span>]</span>: <span class=message>'
