@@ -4,6 +4,12 @@ body {
 	font-family: "Ubuntu", sans-serif;
 	overflow: hidden;
 }
+a {
+	color: #7070FF;
+}
+a:hover {
+	color: #FF7070;
+}
 
 #chatbody {
 	word-wrap: break-word;
@@ -40,6 +46,12 @@ body {
 #controls {
 	font-size: 12px;
 	color: #707070;
+}
+#controls a {
+	color: #707070;
+}
+#controls a:hover {
+	color: #7070FF;
 }
 
 #control_left {

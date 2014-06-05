@@ -25,6 +25,7 @@ var Config = {
 		control_left.innerHTML = this.json.user ?
 			(this.json.user + ' (<a href="bin/accounts/logout" target=_self>Logout</a>)') :
 			"<a href=login.html target=_self>Login or Register</a>";
+		Core.user = this.json.user;
 
 		// TODO: Set other general user preferences here. Log truncation, volume/mute, etc.
 	},
