@@ -74,6 +74,10 @@ a:hover {
 	right: 0px;
 }
 
+.scriptonlylink {
+	cursor: pointer;
+}
+
 #chirp_vol {
 	padding: 0px;
 	margin: -5px;
