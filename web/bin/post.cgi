@@ -18,17 +18,20 @@ if(length($buffer)>0){
 		$postvalues{$name} = $value;
 	}
 }
-my $message = $postvalues{'message'};
+my $message = $postvalues{message};
 $message =~ s/</&lt;/g;
 $message = URI::Encode::uri_encode($message, "\0-\377");
 
-my $ip = $ENV{'HTTP_X_FORWARDED_FOR'} // $ENV{'REMOTE_ADDR'} // "unknown";
+my $ip = $ENV{HTTP_X_FORWARDED_FOR} // $ENV{REMOTE_ADDR} // "unknown";
 $ip =~ s/\//\/\//g;
 $ip =~ s/"/\\"/g;
 
 my $sql = qq/INSERT INTO log(user, remote_addr, message) VALUES("krakissi", "$ip", "$message");/;
 qx/sqlite3 '$database' '$sql'/;
-
-printf "Status: 204 Received\nContent-Type: text/plain; charset=utf-8\n\nReceived\n";
+if($? == 0){
+	printf "Status: 204 Received\nContent-Type: text/plain; charset=utf-8\n\nReceived\n";
+} else {
+	printf "Status: 500 Internal Server Error\n\n";
+}
 
 exit 0
