@@ -8,7 +8,7 @@ chomp(my $user = qx/mod_find accounts:auth/);
 
 my $jsonblob = "{";
 
-if($user =~ s/OK[\s](.*)/\1/){
+if($user =~ s/^OK[\s](.*)$/\1/){
 	$jsonblob .= qq/"user": "$user"/;
 }
 

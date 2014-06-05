@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html><head>
+	<title>reg</title>
+	<meta charset=utf-8>
+	<link rel=stylesheet type=text/css href=css/login.css>
+	<script type=text/javascript src=js/Ajax.js></script>
+	<script type=text/javascript>
+		var username_old = "";
+
+		function loginaction(){
+			alert('meow');
+		}
+
+		function setloginmode(state){
+			if(state === undefined)
+				return;
+
+			if(state){
+				// Login mode
+				document.getElementById('password_retype').style.display = 'none';
+				document.getElementById('sendbutton').value = 'Login';
+			} else {
+				// Registration mode
+				document.getElementById('password_retype').style.display = 'block';
+				document.getElementById('sendbutton').value = 'Register';
+			}
+		}
+
+		function checkusername(event){
+			var name = document.getElementById('name').value;
+
+			if(name.length < 4)
+				return;
+
+			if(name != username_old){
+				var target = 'bin/exists.cgi?name=' + name;
+
+				Ajax.get({
+					target: target,
+					success: function(xhr){
+						var json = JSON.parse(xhr.responseText.trim());
+
+						if(json)
+							setloginmode(json.exists);
+					}
+				});
+			}
+
+			username_old = name;
+		}
+	</script>
+</head><body>
+	<form method=POST>
+		<div>
+			<label for=name>username</label>
+			<input name=name id=name onkeyup="checkusername(event)">
+		</div>
+
+		<div>
+			<label for=pass>password</label>
+			<input type=password name=pass id=pass>
+		</div>
+
+		<div id=password_retype>
+			<label for=repass>repassword</label>
+			<input type=password name=repass id=repass>
+		</div>
+
+		<input type=button value="Register" id="sendbutton" onclick="loginaction()">
+	</form>
+</body></html>
