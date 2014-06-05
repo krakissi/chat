@@ -10,13 +10,24 @@ var Config = {
 			target: 'bin/config.cgi',
 			success: function(http){
 				Config.json = JSON.parse(http.responseText.trim());
+				Config.setup();
 			}
 		});
 	},
 
 	init: function(){
 		document.addEventListener("initcomplete", Config.get);
-	}
+	},
+
+	setup: function(){
+		// Login controls
+		var control_left = document.getElementById('control_left');
+		control_left.innerHTML = this.json.user ?
+			(this.json.user + ' (<a href="bin/accounts/logout" target=_self>Logout</a>)') :
+			"<a href=login.html target=_self>Login or Register</a>";
+
+		// TODO: Set other general user preferences here. Log truncation, volume/mute, etc.
+	},
 };
 
 if(Core)
