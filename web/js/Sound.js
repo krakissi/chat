@@ -21,12 +21,12 @@ var Sound = {
 	
 	// Mute sounds.
 	mute: function(force){
-		Sound.bloop.muted = Sound.horn.muted = (force === true) ? true : Sound.chirp_mute.checked;
+		localStorage.setItem("Sound.muted", Sound.bloop.muted = Sound.horn.muted = (force === true) ? true : Sound.chirp_mute.checked);
 	},
 
 	// Adjust volume attenuation.
 	atten: function(bloop){
-		Sound.bloop.volume = Sound.horn.volume = Sound.chirp_vol.value;
+		localStorage.setItem("Sound.volume", Sound.bloop.volume = Sound.horn.volume = Sound.chirp_vol.value);
 		if(!(bloop === false))
 			Sound.bloop.play();
 	},
@@ -43,6 +43,11 @@ var Sound = {
 
 		this.chirp_mute = document.getElementById('chirp_mute');
 		this.chirp_vol = document.getElementById('chirp_vol');
+
+		var ls_muted = localStorage.getItem("Sound.muted");
+		this.chirp_mute.checked = (ls_muted && (ls_muted == "true"));
+		var ls_vol = localStorage.getItem("Sound.volume");
+		this.chirp_vol.value = (ls_vol || (ls_vol === "0")) ? ls_vol : this.chirp_vol.value;
 
 		this.chirp_mute.addEventListener("change", Sound.mute);
 		this.chirp_vol.addEventListener("change", Sound.atten);

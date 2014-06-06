@@ -94,9 +94,11 @@ var Message = {
 
 	// Enable/disable truncate mode.
 	truncate: function(){
-		if(Message.truncatemode = document.getElementById('truncate_toggle').checked)
+		if(Message.truncatemode = Message.truncate_toggle.checked)
 			if(Message.chatbody.innerHTML.length > Message.truncatelength)
 				Message.chatbody.innerHTML = Message.chatbody.innerHTML.substr(Message.chatbody.innerHTML.length - Message.truncatelength + 1);
+
+		localStorage.setItem("Message.truncate", Message.truncatemode);
 	},
 
 	init: function(){
@@ -109,11 +111,14 @@ var Message = {
 		this.message.focus();
 
 		// TODO: localStorage
-		var truncate_toggle = document.getElementById('truncate_toggle');
-		this.truncatemode = truncate_toggle.checked;
+		this.truncate_toggle = document.getElementById('truncate_toggle');
 
-		document.addEventListener(Chat.newmessage.eventName, Message.truncate);
-		truncate_toggle.addEventListener("change", Message.truncate);
+		var ls_truncate = localStorage.getItem("Message.truncate");
+		this.truncate_toggle.checked = (ls_truncate && (ls_truncate == "true"));
+
+		document.addEventListener(Chat.newmessage.eventName, this.truncate);
+		truncate_toggle.addEventListener("change", this.truncate);
+		this.truncate();
 	}
 };
 
