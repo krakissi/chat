@@ -11,6 +11,10 @@ var Chat = {
 	timeout: undefined,
 	newmessage: undefined,
 
+	sleeping: false,
+	sleepcounter: 0,
+	sleepevent: undefined,
+
 	lock: false,
 	lockout: undefined,
 	delay_lockout: 30000,
@@ -35,6 +39,15 @@ var Chat = {
 						});
 						document.dispatchEvent(Chat.newmessage);
 					}
+
+					Chat.sleeptoggle(false);
+				},
+				unhandled: function(e){
+					if((e.status === 204) && (!Chat.sleeping))
+						Chat.sleepcounter++;
+
+					if(Chat.sleepcounter > 60)
+						Chat.sleeptoggle(true);
 				},
 				completion: function(e){
 					Chat.lock_free();
@@ -45,6 +58,22 @@ var Chat = {
 		}
 
 		this.timeout = setTimeout('Chat.get()', this.delay);
+	},
+
+	// Toggle sleep mode (resource saver).
+	sleeptoggle: function(set){
+		var was = this.sleeping;
+		if(set === undefined)
+			set = !was;
+
+		this.sleeping = set;
+		this.sleepcounter = 0;
+		this.delay = set ? 10000 : 1000;
+
+		if(was)
+			this.get();
+
+		document.dispatchEvent(this.sleepevent);
 	},
 
 	// Prevent queueing many requests.
@@ -87,6 +116,10 @@ var Chat = {
 		this.newmessage = document.createEvent("HTMLEvents");
 		this.newmessage.initEvent("Message_new", true, true);
 		this.newmessage.eventName = "Message_new";
+
+		this.sleepevent = document.createEvent("HTMLEvents");
+		this.sleepevent.initEvent("Sleep_changed", true, true);
+		this.sleepevent.eventName = "Sleep_changed";
 
 		this.freeze();
 		this.last = {
