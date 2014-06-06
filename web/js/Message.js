@@ -7,6 +7,9 @@ var Message = {
 	message: undefined,
 	waslocked: true,
 
+	truncatelength: 30000,
+	truncatemode: undefined,
+
 	send: function(){
 		var post = encodeURIComponent(this.message.value);
 
@@ -89,6 +92,13 @@ var Message = {
 		}
 	},
 
+	// Enable/disable truncate mode.
+	truncate: function(){
+		if(Message.truncatemode = document.getElementById('truncate_toggle').checked)
+			if(Message.chatbody.innerHTML.length > Message.truncatelength)
+				Message.chatbody.innerHTML = Message.chatbody.innerHTML.substr(Message.chatbody.innerHTML.length - Message.truncatelength + 1);
+	},
+
 	init: function(){
 		this.chatbody = document.getElementById('chatbody');
 		this.message = document.getElementById('message');
@@ -97,6 +107,13 @@ var Message = {
 		this.message.onkeyup = this.keyhandler;
 
 		this.message.focus();
+
+		// TODO: localStorage
+		var truncate_toggle = document.getElementById('truncate_toggle');
+		this.truncatemode = truncate_toggle.checked;
+
+		document.addEventListener(Chat.newmessage.eventName, Message.truncate);
+		truncate_toggle.addEventListener("change", Message.truncate);
 	}
 };
 
