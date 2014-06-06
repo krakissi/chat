@@ -74,11 +74,13 @@ if($last eq $queryvals{t}){
 print<<EOF;
 Status: 204 No New Messages
 Content-Type: text/plain; charset=utf-8
+krakws-skiplog: true
 
 EOF
 } else {
 print<<EOF;
 Content-Type: application/json; charset=utf-8
+krakws-skiplog: true
 
 $output
 EOF
