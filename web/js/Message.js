@@ -19,10 +19,13 @@ var Message = {
 		post = "message=" + post;
 
 		Ajax.get({
-			method:'POST',
-			target:'bin/post.cgi',
-			post:post
+			method: 'POST',
+			target: 'bin/post.cgi',
+			post: post
 		});
+
+		if(Chat.sleeping)
+			Chat.sleeptoggle(false);
 
 		return true;
 	},
