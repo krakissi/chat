@@ -5,6 +5,7 @@ var Message = {
 	name: "Message",
 	chatbody: undefined,
 	message: undefined,
+	post_status: undefined,
 	waslocked: true,
 
 	truncatelength: 30000,
@@ -21,13 +22,47 @@ var Message = {
 		Ajax.get({
 			method: 'POST',
 			target: 'bin/post.cgi',
-			post: post
+			post: post,
+			onreadystatechange: function(xhr){
+				var pstate = 0;
+
+				if(xhr.readyState === 4){
+					if(xhr.status === 204)
+						pstate = 2;
+				} else pstate = 1;
+
+				Message.posting_status(pstate);
+			}
 		});
 
 		if(Chat.sleeping)
 			Chat.sleeptoggle(false);
 
 		return true;
+	},
+
+	// A gremlin from kc1.
+	posting_status: function(state){
+		clearTimeout(Message.post_status_to);
+		switch(state){
+		case 1:
+			Message.post_status.style.display = "inline";
+			Message.post_status.innerHTML = '<span style="color: yellow;">Posting...</span>';
+			break;
+		case 2:
+			Message.post_status.style.display = "inline";
+			Message.post_status.innerHTML = '<span style="color: green;">OK</span>';
+			Message.post_status_to = setTimeout('Message.posting_status(0)', 1500);
+			break;
+		case -1:
+			Message.post_status.style.display = "inline";
+			Message.post_status.innerHTML = '<span style="color: red;">Failed</span>';
+			Message.post_status_to = setTimeout('Message.posting_status(0)', 5000);
+			break;
+		default:
+			Message.post_status.style.display = "none";
+			Message.post_status.innerHTML = "";
+		}
 	},
 
 	// Convert from 24-hour to 12-hour AM/PM time.
@@ -107,18 +142,15 @@ var Message = {
 	init: function(){
 		this.chatbody = document.getElementById('chatbody');
 		this.message = document.getElementById('message');
+		this.post_status = document.getElementById('post_status');
+		this.truncate_toggle = document.getElementById('truncate_toggle');
 
 		this.message.onkeypress = this.keyhandler;
 		this.message.onkeyup = this.keyhandler;
-
 		this.message.focus();
-
-		// TODO: localStorage
-		this.truncate_toggle = document.getElementById('truncate_toggle');
 
 		var ls_truncate = localStorage.getItem("Message.truncate");
 		this.truncate_toggle.checked = (ls_truncate && (ls_truncate == "true"));
-
 		document.addEventListener(Chat.newmessage.eventName, this.truncate);
 		truncate_toggle.addEventListener("change", this.truncate);
 		this.truncate();

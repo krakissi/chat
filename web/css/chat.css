@@ -23,6 +23,21 @@ a:hover {
 	top: 0px;
 }
 
+#post_status {
+	display: none;
+	position: absolute;
+	bottom: 80px;
+	right: 25px;
+	text-align: right;
+	font-size: 12px;
+	font-weight: bolder;
+	background-color: #090b0d;
+	border: 1px solid #282a2e;
+	padding-top: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
 #message {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;

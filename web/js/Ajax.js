@@ -16,7 +16,10 @@ var Ajax = {
 		this.method = (meta.method) ? meta.method : "GET";
 		this.target = meta.target;
 
-		http.onreadystatechange = (meta.onreadystatechange) ? meta.onreadystatechange : function(){
+		http.onreadystatechange = function(){
+			if(meta.onreadystatechange)
+				return meta.onreadystatechange(http);
+
 			if(http.readyState === 4){
 				switch(http.status){
 					case 200:
