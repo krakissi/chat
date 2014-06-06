@@ -3,26 +3,39 @@
 	<title>reg</title>
 	<meta charset=utf-8>
 	<link rel=stylesheet type=text/css href=css/login.css>
-	<script type=text/javascript src=js/Ajax.js></script>
 	<script type=text/javascript>
+		// Ajax.js is cry baby; it needs its Core.
+		var Core = { add: function(){} };
+
 		var username_old = "";
+		var loginmode = false;
 
 		function loginaction(){
-			alert('meow');
+			var repass = document.getElementById('repass');
+			var form = document.forms['loginform'];
+
+			form.action = (loginmode || (repass.value === "")) ? 'bin/accounts/login' : 'bin/accounts/register';
+			form.submit();
 		}
 
 		function setloginmode(state){
 			if(state === undefined)
 				return;
 
+			var retype = document.getElementById('password_retype');
+			var sendbt = document.getElementById('sendbutton');
+			var repass = document.getElementById('repass');
 			if(state){
 				// Login mode
-				document.getElementById('password_retype').style.display = 'none';
-				document.getElementById('sendbutton').value = 'Login';
+				retype.style.display = 'none';
+				sendbt.value = 'Login';
+				loginmode = true;
 			} else {
 				// Registration mode
-				document.getElementById('password_retype').style.display = 'block';
-				document.getElementById('sendbutton').value = 'Register';
+				retype.style.display = 'block';
+				sendbt.value = 'Register';
+				repass.value = '';
+				loginmode = false;
 			}
 		}
 
@@ -48,24 +61,32 @@
 
 			username_old = name;
 		}
+
+		function maybesubmit(event){
+			if((event.keyCode || event.which) == 13)
+				loginaction();
+		}
 	</script>
-</head><body>
-	<form method=POST>
+	<script type=text/javascript src=js/Ajax.js></script>
+</head><body onload="checkusername(event)">
+	<form name=loginform method=post>
+		<input type=hidden name=onsuccess value="/">
+
 		<div>
 			<label for=name>username</label>
-			<input name=name id=name onkeyup="checkusername(event)">
+			<input name=name id=name onkeyup="maybesubmit(event); checkusername(event)">
 		</div>
 
 		<div>
 			<label for=pass>password</label>
-			<input type=password name=pass id=pass>
+			<input type=password name=pass id=pass onkeyup="maybesubmit(event)">
 		</div>
 
 		<div id=password_retype>
 			<label for=repass>repassword</label>
-			<input type=password name=repass id=repass>
+			<input type=password name=repass id=repass onkeyup="maybesubmit(event)">
 		</div>
 
-		<input type=button value="Register" id="sendbutton" onclick="loginaction()">
+		<input type=button value="Register" id="sendbutton" onclick="loginaction(event)">
 	</form>
 </body></html>
