@@ -53,7 +53,7 @@ var Sound = {
 		this.mute(true);
 
 		// Listen for new messages to bloop at.
-		document.addEventListener("Message_new", Sound.messagealert);
+		document.addEventListener(Chat.newmessage.eventName, this.messagealert);
 	}
 };
 

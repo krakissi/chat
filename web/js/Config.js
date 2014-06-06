@@ -16,7 +16,7 @@ var Config = {
 	},
 
 	init: function(){
-		document.addEventListener(Core.initcomplete.eventName, Config.get);
+		document.addEventListener(Core.initcomplete.eventName, this.get);
 	},
 
 	setup: function(){

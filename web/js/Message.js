@@ -5,6 +5,7 @@ var Message = {
 	name: "Message",
 	chatbody: undefined,
 	message: undefined,
+	waslocked: true,
 
 	send: function(){
 		var post = encodeURIComponent(this.message.value);
@@ -68,6 +69,8 @@ var Message = {
 
 		if(locked)
 			Message.chatbody.scrollTop = Message.chatbody.scrollHeight;
+
+		this.waslocked = locked;
 	},
 
 	// Handle received keyboard input.
