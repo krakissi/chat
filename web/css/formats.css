@@ -9,3 +9,7 @@
 .hashtag {
 	color: #7aa6da;
 }
+
+.darkusername {
+	text-shadow: 1px 1px 5px #909090;
+}

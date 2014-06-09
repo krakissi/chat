@@ -55,6 +55,7 @@ my $userjson = "";
 my @userlist = keys %users;
 foreach my $user (@userlist){
 	my $color = "#a0a0a0";
+	my $highlight = "";
 
 	$sql = qq/SELECT value FROM userprefs WHERE id_pref=(SELECT id_pref FROM prefs WHERE desc="color") AND user="$user";/;
 	$response = qx/sqlite3 '$database' '$sql'/;
@@ -62,10 +63,16 @@ foreach my $user (@userlist){
 		chomp($response);
 		if(length($response) > 0){
 			$color = "#$response";
+
+			if($response =~ /([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})/){
+				if(($1 + $2 + $3) < 70){
+					$highlight = "darkusername";
+				}
+			}
 		}
 	}
 
-	$userjson .= qq/"$user": {"color": "$color"},/;
+	$userjson .= qq/"$user": {"color": "$color"/ . ((length($highlight) > 0) ? qq/, "highlight": "$highlight"/ : "") . qq/},/;
 }
 $userjson =~ s/^(.*),$/\1/;
 $output = qq/{"last": "$last", "messages": [$output {}], "userlist": {$userjson}}/;

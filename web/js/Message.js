@@ -96,14 +96,21 @@ var Message = {
 			var tsdate = tsparts[0];
 			var tstime = this.time24to12(tsparts[1]);
 
-			var usercolor = Chat.last.userlist[msg.user].color;
+			var userinfo = Chat.last.userlist[msg.user];
+			var usercolor = undefined;
+			var userhighlight = undefined;
+			if(userinfo){
+				usercolor = userinfo.color;
+				userhighlight = userinfo.highlight;
+			}
 			if(!usercolor)
 				usercolor = 'white';
 
 			this.chatbody.innerHTML += '<div><span class=timestamp><span class=date>'
 				+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
 				+ '</span> <span class=user_brackets style="color: ' + msg.ipcolor
-				+ ';">[<span class=user style="color: ' + usercolor + ';">' + msg.user
+				+ ';">[<span class="user' + (userhighlight ? ' ' + userhighlight : '' )
+				+ '" style="color: ' + usercolor + ';">' + msg.user
 				+ '</span>]</span> <span class=message>'
 				+ msg.message + '</span></div>';
 		}
