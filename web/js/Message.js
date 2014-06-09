@@ -77,7 +77,7 @@ var Message = {
 			h %= 12;
 			ap = "pm";
 		}
-		if(!h)
+		if(!h || (h == "00"))
 			h = 12;
 
 		return h + ':' + m + ':' + s + ' ' + ap;
