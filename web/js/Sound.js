@@ -11,14 +11,6 @@ var Sound = {
 	chirp_mute: undefined,
 	chirp_vol: undefined,
 
-	// Load an audio file.
-	load: function(uri){
-		var audio = new Audio();
-		audio.src = uri;
-
-		return audio;
-	},
-	
 	// Mute sounds.
 	mute: function(force){
 		localStorage.setItem("Sound.muted", Sound.bloop.muted = Sound.horn.muted = (force === true) ? true : Sound.chirp_mute.checked);
@@ -32,19 +24,14 @@ var Sound = {
 	},
 
 	messagealert: function(){
-		if(Sound.bloop.muted === false){
-			// Chrome sucks.
-			if(window.chrome)
-				Sound.bloop.load();
-
+		if(Sound.bloop.muted === false)
 			Sound.bloop.play();
-		}
 		Sound.mute();
 	},
 
 	init: function(){
-		this.bloop = this.load('snd/chirp.wav');
-		this.horn = this.load('snd/horn.wav');
+		this.bloop = document.getElementById("Sound.bloop");
+		this.horn = document.getElementById("Sound.horn");
 
 		this.chirp_mute = document.getElementById('chirp_mute');
 		this.chirp_vol = document.getElementById('chirp_vol');
