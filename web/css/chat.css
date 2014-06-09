@@ -33,9 +33,31 @@ a:hover {
 	font-weight: bolder;
 	background-color: #090b0d;
 	border: 1px solid #282a2e;
-	padding-top: 2px;
-	padding-left: 4px;
-	padding-right: 4px;
+	padding: 2px 4px 0 4px;
+}
+
+#preferences_window {
+	display: none;
+	position: absolute;
+	bottom: 80px;
+	left: 25px;
+	font-size: 12px;
+	font-weight: bolder;
+	background-color: #090b0d;
+	border: 1px solid #282a2e;
+	padding: 2px 4px 0 4px;
+}
+#preferences_window div {
+	padding: 0.5em 0;
+}
+#preferences_window div.submitterdiv {
+	text-align: right;
+	width: 100%;
+}
+#preferences_window input,
+#preferences_window button {
+	border: solid 1px gray;
+	background-color: white;
 }
 
 #message {

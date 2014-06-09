@@ -8,7 +8,8 @@ CREATE TABLE log (
 CREATE TABLE userprefs (
 	user VARCHAR NOT NULL,
 	id_pref INTEGER NOT NULL,
-	value VARCHAR
+	value VARCHAR,
+	PRIMARY KEY (user, id_pref)
 );
 
 CREATE TABLE prefs (

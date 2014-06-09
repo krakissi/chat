@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+# mperron (2014)
+#
+# Read preference key/value pairs from POST data and inserts them into userprefs.
 
 use strict;
 use URI::Encode;
@@ -20,22 +23,23 @@ if(length($buffer) > 0){
 		$postvalues{$name} = $value;
 	}
 }
-my $message = $postvalues{message};
-$message =~ s/</&lt;/g;
-$message = URI::Encode::uri_encode($message, "\0-\377");
-
-my $ip = $ENV{HTTP_X_FORWARDED_FOR} // $ENV{REMOTE_ADDR} // "unknown";
-$ip =~ s/\//\/\//g;
-$ip =~ s/(["'])/\\\1/g;
 
 if(!($user =~ s/OK[\s](.*)/\1/)){
-	$user = $ip;
+	printf "Status: 401 Unauthorized\n\n";
+	exit 0
 }
 
-my $sql = qq/INSERT INTO log(user, remote_addr, message) VALUES("$user", "$ip", "$message");/;
+my $sql = "";
+
+my $color = $postvalues{color};
+if((length($color) > 0) && ($color =~ /^[0-9a-fA-F]{6}$/)){
+	$color = lc $color;
+	$sql .= qq/REPLACE INTO userprefs(user, id_pref, value) VALUES("$user", (SELECT id_pref FROM prefs WHERE desc="color"), "$color");/;
+}
+
 qx/sqlite3 '$database' '$sql'/;
 if($? == 0){
-	printf "Status: 204 Received\nContent-Type: text/plain; charset=utf-8\n\nReceived\n";
+	printf "Status: 204 Updated\n\n";
 } else {
 	printf "Status: 500 Internal Server Error\n\n";
 }
