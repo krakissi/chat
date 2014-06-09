@@ -15,13 +15,13 @@ if(length($buffer) > 0){
 	my @pairs = split(/[;&]/, $buffer);
 	foreach my $pair (@pairs){
 		my ($name, $value) = split(/=/, $pair);
-		$value =~ s/\+/ /g;
-		$value = URI::Encode::uri_decode($value);
 		$postvalues{$name} = $value;
 	}
 }
 my $message = $postvalues{message};
-$message =~ s/</&lt;/g;
+$message =~ s/\\/\\\\/g;
+$message =~ s/'/\\'/g;
+$message = qx/echo '$message' | mod_find chat:formatter/;
 $message = URI::Encode::uri_encode($message, "\0-\377");
 
 my $ip = $ENV{HTTP_X_FORWARDED_FOR} // $ENV{REMOTE_ADDR} // "unknown";
