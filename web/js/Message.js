@@ -83,8 +83,19 @@ var Message = {
 		return h + ':' + m + ':' + s + ' ' + ap;
 	},
 
+	batch_clear: function(){
+		this.batchset = '';
+	},
+
+	batch_commit: function(){
+		this.chatbody.innerHTML += this.batchset;
+		this.batch_clear();
+
+		this.chatbody.scrollTop = this.chatbody.scrollHeight;
+	},
+
 	// Write a received message out to the chatbody div.
-	receive: function(msg){
+	receive: function(msg, batch){
 		var locked = false;
 
 		if(Message.chatbody.scrollTop === (Message.chatbody.scrollHeight - Message.chatbody.offsetHeight))
@@ -106,13 +117,17 @@ var Message = {
 			if(!usercolor)
 				usercolor = 'white';
 
-			this.chatbody.innerHTML += '<div><span class=timestamp><span class=date>'
+			var formatted = '<div><span class=timestamp><span class=date>'
 				+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
 				+ '</span> <span class=user_brackets style="color: ' + msg.ipcolor
 				+ ';">[<span class="user' + (userhighlight ? ' ' + userhighlight : '' )
 				+ '" style="color: ' + usercolor + ';">' + msg.user
 				+ '</span>]</span> <span class=message>'
 				+ msg.message + '</span></div>';
+
+			if(batch)
+				this.batchset += formatted;
+			else this.chatbody.innerHTML += formatted;
 		}
 
 		if(locked)

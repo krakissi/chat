@@ -34,9 +34,21 @@ var Chat = {
 					Chat.last = JSON.parse(e.responseText.trim());
 
 					if(Chat.last.messages){
+						var batch = false;
+
+						if(Chat.last.messages.length > 25)
+							batch = true;
+
+						if(batch)
+							Message.batch_clear();
+
 						Chat.last.messages.forEach(function(msg){
-							Message.receive(msg);
+							Message.receive(msg, batch);
 						});
+
+						if(batch)
+							Message.batch_commit();
+
 						document.dispatchEvent(Chat.newmessage);
 					}
 
