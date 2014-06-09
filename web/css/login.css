@@ -12,6 +12,21 @@ input {
 }
 
 #contentpane {
-	width: 140px;
+	width: 500px;
 	margin: 20px auto;
+}
+
+.inlineblock {
+	margin: 0 10px;
+	display: inline-block;
+	vertical-align: top;
+	width: 200px;
+}
+.inlineblock p {
+	text-align: justify;
+	text-indent: 2em;
+}
+
+#help {
+	width: 250px;
 }

@@ -70,26 +70,34 @@
 	<script type=text/javascript src=js/Ajax.js></script>
 </head><body onload="checkusername(event)">
 	<div id=contentpane>
-		<h2>kraknet</h2>
-		<form name=loginform method=post>
-			<input type=hidden name=onsuccess value="/">
+		<div class=inlineblock>
+			<h2>kraknet</h2>
+			<form name=loginform method=post>
+				<input type=hidden name=onsuccess value="/">
 
-			<div>
-				<label for=name>username</label>
-				<input name=name id=name onkeyup="maybesubmit(event); checkusername(event)">
-			</div>
+				<div>
+					<label for=name>username</label>
+					<input name=name id=name onkeyup="maybesubmit(event); checkusername(event)">
+				</div>
 
-			<div>
-				<label for=pass>password</label>
-				<input type=password name=pass id=pass onkeyup="maybesubmit(event)">
-			</div>
+				<div>
+					<label for=pass>password</label>
+					<input type=password name=pass id=pass onkeyup="maybesubmit(event)">
+				</div>
 
-			<div id=password_retype>
-				<label for=repass>repassword</label>
-				<input type=password name=repass id=repass onkeyup="maybesubmit(event)">
-			</div>
+				<div id=password_retype>
+					<label for=repass>repassword</label>
+					<input type=password name=repass id=repass onkeyup="maybesubmit(event)">
+				</div>
 
-			<input type=button value="Register" id="sendbutton" onclick="loginaction(event)">
-		</form>
+				<input type=button value="Register" id="sendbutton" onclick="loginaction(event)">
+			</form>
+		</div>
+
+		<div id=help class=inlineblock>
+			<p>Welcome to the new kraknet! Old krakchat accounts will <b>not</b> work; you will need to make a new one.</p>
+			<p>Usernames should be at least four characters, with any combination of lowercase letters, numbers, hyphens, and underscores.</p>
+			<p>Passwords can be anything you want, but must be at least six characters.</p>
+		</div>
 	</div>
 </body></html>
