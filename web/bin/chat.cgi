@@ -65,7 +65,7 @@ foreach my $user (@userlist){
 			$color = "#$response";
 
 			if($response =~ /([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})/){
-				if(($1 + $2 + $3) < 70){
+				if((hex($1) + hex($2) + hex($3)) < 70){
 					$highlight = "darkusername";
 				}
 			}
