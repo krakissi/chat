@@ -131,9 +131,13 @@ var Message = {
 		}
 
 		if(locked)
-			Message.chatbody.scrollTop = Message.chatbody.scrollHeight;
+			this.scrollbottom();
 
 		this.waslocked = locked;
+	},
+
+	scrollbottom: function(){
+		Message.chatbody.scrollTop = Message.chatbody.scrollHeight;
 	},
 
 	// Handle received keyboard input.

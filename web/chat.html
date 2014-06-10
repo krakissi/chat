@@ -19,6 +19,9 @@
 	<textarea id=message></textarea>
 	<span id=post_status></span>
 	<span id=preferences_window></span>
+	<span id=missed_ack>
+		<a class=scriptonlylink onclick="Title.ack();">Acknowledge</a>
+	</span>
 
 	<!-- Sound resources -->
 	<audio id="Sound.bloop" preload=auto>
@@ -36,6 +39,8 @@
 			<a class=scriptonlylink onclick="Chat.toggle_dates()">Dates</a>
 			|
 			<a href="http://imgur.com/a/Tm9HA">Best</a>
+			|
+			<a class=scriptonlylink onclick="Message.scrollbottom();">Bottom</a>
 		</div>
 		<div id=control_left>
 			<!-- user controls, built by javascript -->

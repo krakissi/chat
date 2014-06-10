@@ -16,20 +16,27 @@ var Title = {
 			document.title = Chat.sleeping ? Title.SLEEPTITLE : Title.storedtitle;
 	},
 
+	ack: function(){
+		Title.ackbox.style.display = 'none';
+		Title.missedmessages = 0;
+		Title.sleep();
+	},
+
 	// Message counter.
 	counter: function(){
-		// FIXME: This should maybe increment when the user isn't scrolled to the bottom, but new messages come in.
-		if(!document.hasFocus())
+		if(!document.hasFocus() || !Message.waslocked)
 			Title.missedmessages += Chat.last.messages ? (Chat.last.messages.length - 1) : 1;
 		else Title.missedmessages = 0;
 
-		if(Title.missedmessages)
+		if(Title.missedmessages){
 			document.title = Title.missedmessages + " new message" + ((Title.missedmessages === 1) ? "" : "s") + " (Krakchat)";
-		else Title.sleep();
+			Title.ackbox.style.display = 'inline';
+		} else Title.ack();
 	},
 
 	init: function(){
 		this.storedtitle = document.title;
+		this.ackbox = document.getElementById('missed_ack');
 
 		document.addEventListener(Chat.sleepevent.eventName, this.sleep);
 		document.addEventListener(Chat.newmessage.eventName, this.counter);

@@ -36,6 +36,20 @@ a:hover {
 	padding: 2px 4px 0 4px;
 }
 
+#missed_ack {
+	display: none;
+	position: absolute;
+	bottom: 110px;
+	right: 25px;
+	text-align: right;
+	font-size: 12px;
+	font-weight: bolder;
+	background-color: #090b0d;
+	border: 1px solid #282a2e;
+	padding: 2px 4px 0 4px;
+}
+
+
 #preferences_window {
 	display: none;
 	position: absolute;
