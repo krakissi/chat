@@ -180,6 +180,8 @@ var Message = {
 		document.addEventListener(Chat.newmessage.eventName, this.truncate);
 		truncate_toggle.addEventListener("change", this.truncate);
 		this.truncate();
+
+		document.addEventListener(Core.resizeevent.eventName, this.scrollbottom);
 	}
 };
 

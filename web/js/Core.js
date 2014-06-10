@@ -9,6 +9,7 @@ var Core = {
 	modules: undefined,
 	initcomplete: undefined,
 	focusevent: undefined,
+	resizeevent: undefined,
 
 	focus: function(){
 		document.dispatchEvent(Core.focusevent);
@@ -23,6 +24,14 @@ var Core = {
 		this.focusevent = document.createEvent("HTMLEvents");
 		this.focusevent.initEvent("focusevent", true, true);
 		this.focusevent.eventName = "focusevent";
+
+		this.resizeevent = document.createEvent("HTMLEvents");
+		this.resizeevent.initEvent("resizeevent", true, true);
+		this.resizeevent.eventName = "resizeevent";
+
+		window.onresize = function(){
+			document.dispatchEvent(Core.resizeevent);
+		};
 
 		this.modules.forEach(function(mod){
 			if(mod.init)
