@@ -25,7 +25,7 @@ if(length($buffer) > 0){
 my $exists = "false";
 
 my $name = lc $queryvals{name};
-if($name =~ /^[a-z\d]{4,}+$/){
+if($name =~ /^[a-z\d_\-]{4,128}+$/){
 	my $sql = qq/SELECT name FROM users WHERE name="$name" LIMIT 1;/;
 	chomp(my $response = qx/sqlite3 '$database' '$sql'/);
 	$exists = "true" if(length($response) > 0);

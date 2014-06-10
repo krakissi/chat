@@ -19,15 +19,16 @@ if(length($buffer) > 0){
 	}
 }
 my $message = $postvalues{message};
-$message =~ s/\\/\\\\/g;
-$message =~ s/'/%27/g;
+$message =~ s/'/'"'"'/g; # Oh Bash, you so silly.
 $message = qx/echo '$message' | mod_find chat:formatter/;
 $message = URI::Encode::uri_encode($message, "\0-\377");
-$message =~ s/(['"])/\\\1/g;
+$message =~ s/"/\\"/g;
+$message =~ s/'/'"'"'/g;
 
 my $ip = $ENV{HTTP_X_FORWARDED_FOR} // $ENV{REMOTE_ADDR} // "unknown";
 $ip =~ s/\\/\\\\/g;
-$ip =~ s/(["'])/\\\1/g;
+$ip =~ s/"/\\"/g;
+$ip =~ s/'/'"'"'/g;
 
 if(!($user =~ s/OK[\s](.*)/\1/)){
 	$user = $ip;

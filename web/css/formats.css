@@ -9,6 +9,12 @@
 .hashtag {
 	color: #7aa6da;
 }
+.code {
+	font-family: CodingFontTobi, monospace;
+	font-size: 12pt;
+	text-align: left;
+	white-space: pre-wrap;
+}
 
 .darkusername {
 	text-shadow: 1px 1px 5px #909090;

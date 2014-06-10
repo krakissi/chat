@@ -27,6 +27,7 @@ my $sql = qq/SELECT datetime(timestamp, "localtime") as timestamp_display, remot
 my $last = $queryvals{t};
 $last =~ s/\\/\\\\/g;
 $last =~ s/"/\\"/g;
+$last =~ s/'/'"'"'/g;
 
 $sql .= ((length($last) == 0) or ($last eq "never")) ? ' ORDER BY timestamp DESC LIMIT 1500;' : qq/ WHERE timestamp_display > "$last" ORDER BY timestamp DESC;/;
 
