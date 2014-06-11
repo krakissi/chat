@@ -43,11 +43,15 @@ foreach my $msg (@updateset){
 	my ($timestamp, $remote_addr, $user, $message) = split('\|', $msg, 4);
 
 	my $ipcolor = "#ffffff";
+	my $iphighlight = "";
 	if($remote_addr =~ /[0-9]*\.([0-9]*)\.([0-9]*)\.([0-9]*)/){
 		$ipcolor = sprintf("#%02x%02x%02x", $1, $2, $3);
+		if(($1 + $2 + $3) < 0x70){
+			$iphighlight = "darkipcolor";
+		}
 	}
 
-	$output .= qq/{"timestamp": "$timestamp", "ipcolor": "$ipcolor", "user": "$user", "message": "$message"},\n/;
+	$output .= qq/{"timestamp": "$timestamp", "ipcolor": "$ipcolor"/ . ((length($iphighlight) > 0) ? qq/, "iphighlight": "$iphighlight"/ : "") . qq/, "user": "$user", "message": "$message"},\n/;
 	$last = $timestamp;
 	$users{$user} = '';
 }
@@ -66,7 +70,7 @@ foreach my $user (@userlist){
 			$color = "#$response";
 
 			if($response =~ /([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})/){
-				if((hex($1) + hex($2) + hex($3)) < 70){
+				if((hex($1) + hex($2) + hex($3)) < 0x70){
 					$highlight = "darkusername";
 				}
 			}

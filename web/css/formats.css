@@ -15,7 +15,10 @@
 	text-align: left;
 	white-space: pre-wrap;
 }
-
-.darkusername {
-	text-shadow: 1px 1px 5px #909090;
+.darkusername,
+.darkipcolor {
+	text-shadow: 1px 1px 5px #ffffff;
+}
+.emote {
+	font-weight: bold;
 }

@@ -117,13 +117,23 @@ var Message = {
 			if(!usercolor)
 				usercolor = 'white';
 
-			var formatted = '<div><span class=timestamp><span class=date>'
-				+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
-				+ '</span> <span class=user_brackets style="color: ' + msg.ipcolor
-				+ ';">[<span class="user' + (userhighlight ? ' ' + userhighlight : '' )
-				+ '" style="color: ' + usercolor + ';">' + msg.user
-				+ '</span>]</span> <span class=message>'
-				+ msg.message + '</span></div>';
+			var emote = msg.message.match(/^\/me/);
+
+			var formatted = (emote) ?
+				'<div><span class=timestamp><span class=date>'
+					+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
+					+ '</span> <span class="user' + (userhighlight ? ' ' + userhighlight : '')
+					+ '" style="color: ' + usercolor + ';">' + msg.user
+					+ '</span> <span class="message emote' + (msg.iphighlight ? ' ' + msg.iphighlight : '')
+					+ '" style="color: ' + msg.ipcolor + ';">'
+					+ msg.message.substr(4) + '</span></div>' :
+				'<div><span class=timestamp><span class=date>'
+					+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
+					+ '</span> <span class=user_brackets style="color: ' + msg.ipcolor
+					+ ';">[<span class="user' + (userhighlight ? ' ' + userhighlight : '')
+					+ '" style="color: ' + usercolor + ';">' + msg.user
+					+ '</span>]</span> <span class=message>'
+					+ msg.message + '</span></div>';
 
 			if(batch)
 				this.batchset += formatted;
