@@ -15,9 +15,16 @@
 	text-align: left;
 	white-space: pre-wrap;
 }
+.user_brackets {
+	font-weight: bold;
+}
+.user {
+	text-shadow: none;
+	font-weight: bold;
+}
 .darkusername,
 .darkipcolor {
-	text-shadow: 1px 1px 5px #ffffff;
+	text-shadow: 0 0 5px #ffffff;
 }
 .emote {
 	font-weight: bold;

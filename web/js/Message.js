@@ -129,7 +129,8 @@ var Message = {
 					+ msg.message.substr(4) + '</span></div>' :
 				'<div><span class=timestamp><span class=date>'
 					+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
-					+ '</span> <span class=user_brackets style="color: ' + msg.ipcolor
+					+ '</span> <span class="user_brackets' + (msg.iphighlight ? ' ' + msg.iphighlight : '')
+					+ '" style="color: ' + msg.ipcolor
 					+ ';">[<span class="user' + (userhighlight ? ' ' + userhighlight : '')
 					+ '" style="color: ' + usercolor + ';">' + msg.user
 					+ '</span>]</span> <span class=message>'
