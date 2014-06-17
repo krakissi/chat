@@ -26,6 +26,11 @@ $message = uri_escape($message);
 $message =~ s/"/\\"/g;
 $message =~ s/'/'"'"'/g;
 
+if(length($message) > 1024){
+	printf "Status: 400 Message Too Long\n\n";
+	exit 0;
+}
+
 my $ip = $ENV{HTTP_X_FORWARDED_FOR} // $ENV{REMOTE_ADDR} // "unknown";
 $ip =~ s/\\/\\\\/g;
 $ip =~ s/"/\\"/g;

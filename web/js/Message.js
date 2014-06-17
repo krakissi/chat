@@ -29,10 +29,21 @@ var Message = {
 				if(xhr.readyState === 4){
 					if(xhr.status === 204)
 						pstate = 2;
+					else if((xhr.status >= 400) && (xhr.status < 500))
+						pstate = 3;
+					else if((xhr.status >= 500) && (xhr.status < 600))
+						pstate = -1;
 				} else pstate = 1;
 
 				Message.posting_status(pstate);
-			}
+
+				// Restore old value on a failure, if there's no current value.
+				if(((pstate == 3) || (pstate == -1)) && (Message.message.value.length == 0))
+					Message.message.value = this.om;
+			},
+
+			// Original message for restoration
+			om: this.message.value
 		});
 
 		if(Chat.sleeping)
@@ -53,6 +64,11 @@ var Message = {
 			Message.post_status.style.display = "inline";
 			Message.post_status.innerHTML = '<span style="color: green;">OK</span>';
 			Message.post_status_to = setTimeout('Message.posting_status(0)', 1500);
+			break;
+		case 3:
+			Message.post_status.style.display = "inline";
+			Message.post_status.innerHTML = '<span style="color: red;">Message too long.</span>';
+			Message.post_status_to = setTimeout('Message.posting_status(0)', 5000);
 			break;
 		case -1:
 			Message.post_status.style.display = "inline";
