@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
-use URI::Encode;
+use URI::Escape;
 
 chomp(my $homepath = qx/mod_home chat/);
 chdir($homepath);
@@ -21,7 +21,8 @@ if(length($buffer) > 0){
 my $message = $postvalues{message};
 $message =~ s/'/'"'"'/g; # Oh Bash, you so silly.
 $message = qx/echo '$message' | mod_find chat:formatter/;
-$message = URI::Encode::uri_encode($message, "\0-\377");
+
+$message = uri_escape($message);
 $message =~ s/"/\\"/g;
 $message =~ s/'/'"'"'/g;
 
