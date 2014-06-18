@@ -40,20 +40,21 @@ if(!($user =~ s/OK[\s](.*)/\1/)){
 	$user = $ip;
 }
 
-my $attempts = 3;
-&post();
+&post(3);
 
 sub post {
-	my $sql = qq/INSERT INTO log(user, remote_addr, message) VALUES("$user", "$ip", "$message");/;
-	qx/sqlite3 '$database' '$sql'/;
-	if($? == 0){
-		printf "Status: 204 Received\nContent-Type: text/plain; charset=utf-8\n\nReceived\n";
+	my $attempts = shift;
+
+	if($attempts <= 0){
+		printf "Status: 500 Internal Server Error\n\n";
 	} else {
-		if(($attempts--) > 0){
-			sleep(1);
-			&post();
+		my $sql = qq/INSERT INTO log(user, remote_addr, message) VALUES("$user", "$ip", "$message");/;
+		qx/sqlite3 '$database' '$sql'/;
+		if($? == 0){
+			printf "Status: 204 Received\nContent-Type: text/plain; charset=utf-8\n\nReceived\n";
 		} else {
-			printf "Status: 500 Internal Server Error\n\n";
+			sleep(1);
+			&post($attempts - 1);
 		}
 	}
 }
