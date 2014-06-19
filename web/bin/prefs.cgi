@@ -4,7 +4,7 @@
 # Read preference key/value pairs from POST data and inserts them into userprefs.
 
 use strict;
-use URI::Encode;
+use URI::Escape;
 
 chomp(my $homepath = qx/mod_home chat/);
 chdir($homepath);
@@ -19,7 +19,7 @@ if(length($buffer) > 0){
 	foreach my $pair (@pairs){
 		my ($name, $value) = split(/=/, $pair);
 		$value =~ s/\+/ /g;
-		$value = URI::Encode::uri_decode($value);
+		$value = uri_unescape($value);
 		$postvalues{$name} = $value;
 	}
 }
