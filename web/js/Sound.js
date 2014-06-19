@@ -24,8 +24,13 @@ var Sound = {
 	},
 
 	messagealert: function(){
-		if(Sound.bloop.muted === false)
+		if(Sound.bloop.muted === false){
+			// Chrome workaround
+			if(window.chrome)
+				Sound.bloop.load();
+
 			Sound.bloop.play();
+		}
 		Sound.mute();
 	},
 
