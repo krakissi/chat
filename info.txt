@@ -2,3 +2,4 @@
 # Mike Perron (2014)
 title=sh/chat_title.sh
 formatter=formatter
+require_https=sh/require_https.sh

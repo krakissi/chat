@@ -2,7 +2,7 @@
 # If the request seems to have come from pound or another proxy, allow
 # it. Otherwise 302 to the HTTPS version of the host.
 
-if [ -n "$HTTP_X_FORWARDED_FOR" ]; then
+if [ $(mod_find chat:require_https) = "no" ] || [ -n "$HTTP_X_FORWARDED_FOR" ]; then
 	p=${REQUEST_URI%/*}
 	p=${p#/}/
 	if [ "$p" = "/" ]; then
