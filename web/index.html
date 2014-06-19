@@ -3,10 +3,16 @@
 # it. Otherwise 302 to the HTTPS version of the host.
 
 if [ -n "$HTTP_X_FORWARDED_FOR" ]; then
-	kraknet chat.html
+	p=${REQUEST_URI%/*}
+	p=${p#/}/
+	if [ "$p" = "/" ]; then
+		kraknet chat.html
+	else
+		kraknet ${p}chat.html
+	fi
 else
 cat <<-EOF
 	Status: 302 Please Use HTTPS
-	Location: https://$HTTP_HOST/
+	Location: https://$HTTP_HOST$REQUEST_URI
 EOF
 fi
