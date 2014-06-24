@@ -124,6 +124,10 @@ var Chat = {
 		return this.hide_tsdate;
 	},
 
+	glow_bottom: function(set){
+		this.bottom_glowss.innerHTML = '.unchecked_highlighter { background-color: ' + (set ? 'yellow' : 'inherit') + '; }';
+	},
+
 	init: function(){
 		this.newmessage = document.createEvent("HTMLEvents");
 		this.newmessage.initEvent("Message_new", true, true);
@@ -144,8 +148,16 @@ var Chat = {
 		document.body.appendChild(sheet);
 		this.hide_tsdatess = document.getElementById(sheet.id);
 
+		sheet = document.createElement('style');
+		sheet.id = 'bottom_link_glow_stylesheet';
+		document.body.appendChild(sheet);
+		this.bottom_glowss = document.getElementById(sheet.id);
+
 		// Default to hiding dates.
 		this.toggle_dates(false);
+
+		// Make the bottom link not glowy.
+		this.glow_bottom(false);
 
 		// Start polling indefinitely.
 		this.get();

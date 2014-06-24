@@ -17,7 +17,7 @@ var Title = {
 	},
 
 	ack: function(){
-		Title.ackbox.style.display = 'none';
+		Chat.glow_bottom(false);
 		Title.missedmessages = 0;
 		Title.sleep();
 	},
@@ -30,13 +30,12 @@ var Title = {
 
 		if(Title.missedmessages){
 			document.title = Title.missedmessages + " new message" + ((Title.missedmessages === 1) ? "" : "s") + " (Krakchat)";
-			Title.ackbox.style.display = 'inline';
+			Chat.glow_bottom(true);
 		} else Title.ack();
 	},
 
 	init: function(){
 		this.storedtitle = document.title;
-		this.ackbox = document.getElementById('missed_ack');
 
 		document.addEventListener(Chat.sleepevent.eventName, this.sleep);
 		document.addEventListener(Chat.newmessage.eventName, this.counter);
