@@ -11,6 +11,8 @@ var Message = {
 	truncatelength: 30000,
 	truncatemode: undefined,
 
+	first: true,
+
 	send: function(){
 		var post = encodeURIComponent(this.message.value);
 
@@ -104,10 +106,16 @@ var Message = {
 	},
 
 	batch_commit: function(){
+		if(this.first){
+			this.chatbody.innerHTML = "";
+			this.first = false;
+		}
+
 		this.chatbody.innerHTML += this.batchset;
 		this.batch_clear();
 
 		this.chatbody.scrollTop = this.chatbody.scrollHeight;
+
 	},
 
 	// Write a received message out to the chatbody div.
