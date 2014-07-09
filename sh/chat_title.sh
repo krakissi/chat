@@ -64,9 +64,15 @@ titles=(
 	"Krakchat (That's hot.)"
 	"Krakchat (BBPLS is my New Backend)"
 	"Krakchat (Because I haven't finished Krakden)"
-	"Krakchat (I actually ported it!)"
 	"Krakchat (Russell, honey ...)"
 	"Krakchat (I mean, ...)"
+	"Krakchat (A Pleasant Gap)"
+	"Krakchat (On the rocks next time)"
+	"Krakchat (There was a loud report)"
+	"Krakchat (Less fun than Anthrocon)"
+	"Krakchat (Where did you think I learned to get shitty?)"
+	"Krakchat (Smashing martini glasses)"
+	"Krakchat (Lemonbrat hoodies for everyone!)"
 )
 pick=$RANDOM
 let "pick %= ${#titles[@]}"
