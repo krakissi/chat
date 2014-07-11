@@ -93,6 +93,8 @@ var Message = {
 
 		if(h >= 12){
 			h %= 12;
+			if(h < 10)
+				h = '0' + h;
 			ap = "pm";
 		}
 		if(!h || (h == "00"))
