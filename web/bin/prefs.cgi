@@ -5,12 +5,11 @@
 
 use strict;
 use URI::Escape;
-
-chomp(my $homepath = qx/mod_home chat/);
-chdir($homepath);
-my $database = "chat.db";
+use DBI;
 
 chomp(my $user = qx/mod_find accounts:auth/);
+
+my $dbh = DBI->connect('dbi:mysql:chat', 'kraknet', '') or warn "could not access DB";
 
 my %postvalues;
 chomp(my $buffer = <STDIN>);
@@ -34,11 +33,11 @@ my $sql = "";
 my $color = $postvalues{color};
 if((length($color) > 0) && ($color =~ /^[0-9a-fA-F]{6}$/)){
 	$color = lc $color;
-	$sql .= qq/REPLACE INTO userprefs(user, id_pref, value) VALUES("$user", (SELECT id_pref FROM prefs WHERE desc="color"), "$color");/;
+	$sql .= qq/REPLACE INTO userprefs(user, id_pref, value) VALUES(?, (SELECT id_pref FROM prefs WHERE description='color'), ?);/;
 }
 
-qx/sqlite3 '$database' '$sql'/;
-if($? == 0){
+my $sth = $dbh->prepare($sql);
+if($sth->execute($user, $color)){
 	printf "Status: 204 Updated\n\n";
 } else {
 	printf "Status: 500 Internal Server Error\n\n";

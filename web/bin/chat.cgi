@@ -7,10 +7,9 @@
 # meta information.
 
 use strict;
+use DBI;
 
-chomp(my $homepath = qx/mod_home chat/);
-chdir($homepath);
-my $database = "chat.db";
+my $dbh = DBI->connect('dbi:mysql:chat', 'kraknet', '') or warn "could not access DB";
 
 my %queryvals;
 my $buffer = $ENV{QUERY_STRING};
@@ -23,24 +22,28 @@ if(length($buffer) > 0){
 	}
 }
 
-my $sql = qq/SELECT datetime(timestamp, "localtime") as timestamp_display, remote_addr, user, message FROM log/;
+my $sql = qq/SELECT timestamp, remote_addr, user, message FROM log/;
+
 my $last = $queryvals{t};
 $last =~ s/\\/\\\\/g;
 $last =~ s/"/\\"/g;
 $last =~ s/'/'"'"'/g;
 
-$sql .= ((length($last) == 0) or ($last eq "never")) ? ' ORDER BY timestamp DESC LIMIT 1500;' : qq/ WHERE timestamp_display > "$last" ORDER BY timestamp DESC;/;
+$sql .= ((length($last) == 0) or ($last eq "never")) ? ' ORDER BY timestamp DESC LIMIT 1500' : qq/ WHERE timestamp > ? ORDER BY timestamp DESC/;
 
-my $response = qx/sqlite3 '$database' '$sql'/;
-my @updateset = split('\n', $response);
+my $sth = $dbh->prepare("SELECT * FROM ($sql) AS internaltable ORDER BY timestamp ASC;");
+if((length($last) == 0) or ($last eq "never")){
+	$sth->execute();
+} else {
+	$sth->execute($last);
+}
+
 my $output = "";
 my %users;
 
 # Updates are retrieved in reverse order, so we need to flip the list.
-@updateset = reverse @updateset;
-
-foreach my $msg (@updateset){
-	my ($timestamp, $remote_addr, $user, $message) = split('\|', $msg, 4);
+while(my @row = $sth->fetchrow_array()){
+	my ($timestamp, $remote_addr, $user, $message) = @row;
 
 	my $ipcolor = "#ffffff";
 	my $iphighlight = "";
@@ -62,17 +65,20 @@ foreach my $user (@userlist){
 	my $color = "#a0a0a0";
 	my $highlight = "";
 
-	$sql = qq/SELECT value FROM userprefs WHERE id_pref=(SELECT id_pref FROM prefs WHERE desc="color") AND user="$user";/;
-	$response = qx/sqlite3 '$database' '$sql'/;
-	if($? == 0){
-		chomp($response);
-		if(length($response) > 0){
-			$color = "#$response";
+	$sql = qq/SELECT value FROM userprefs WHERE id_pref=(SELECT id_pref FROM prefs WHERE description='color') AND user=?;/;
+	$sth = $dbh->prepare($sql);
+	$sth->execute($user);
 
-			if($response =~ /([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})/){
-				if((hex($1) + hex($2) + hex($3)) < 0x70){
-					$highlight = "darkusername";
-				}
+	my @row = $sth->fetchrow_array();
+	$sth->execute();
+	my $response = $row[0];
+
+	if(length($response) > 0){
+		$color = "#$response";
+
+		if($response =~ /([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})/){
+			if((hex($1) + hex($2) + hex($3)) < 0x70){
+				$highlight = "darkusername";
 			}
 		}
 	}
