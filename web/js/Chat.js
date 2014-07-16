@@ -3,7 +3,8 @@
 */
 var Chat = {
 	name: "Chat",
-	delay: 1000,
+	delay: undefined,
+	delay_base: 1000,
 	truncate: false,
 	truncate_length: 15000,
 
@@ -80,7 +81,7 @@ var Chat = {
 
 		this.sleeping = set;
 		this.sleepcounter = 0;
-		this.delay = set ? 10000 : 1000;
+		this.delay = set ? 10000 : this.delay_base;
 
 		if(was)
 			this.get();
@@ -141,6 +142,8 @@ var Chat = {
 		this.last = {
 			last: 'never'
 		};
+
+		this.delay = this.delay_base;
 
 		// Dynamic stylesheet configuration.
 		var sheet = document.createElement('style');
