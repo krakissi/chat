@@ -1,0 +1,21 @@
+CREATE TABLE log (
+  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  remote_addr varchar(32) DEFAULT NULL,
+  user varchar(256) DEFAULT NULL,
+  message varchar(2048) DEFAULT NULL
+);
+
+CREATE TABLE prefs (
+  id_pref int(11) NOT NULL AUTO_INCREMENT,
+  description varchar(256) NOT NULL,
+  PRIMARY KEY (id_pref)
+);
+
+CREATE TABLE userprefs (
+  user varchar(256) NOT NULL,
+  id_pref int(11) NOT NULL,
+  value varchar(2048) DEFAULT NULL,
+  PRIMARY KEY (user, id_pref)
+);
+
+INSERT INTO prefs(description) VALUES('color');
