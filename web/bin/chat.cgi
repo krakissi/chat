@@ -22,14 +22,14 @@ if(length($buffer) > 0){
 	}
 }
 
-my $sql = qq/SELECT timestamp, remote_addr, user, message FROM log/;
+my $sql = qq/SELECT id_message, timestamp, remote_addr, user, message FROM log/;
 
 my $last = $queryvals{t};
 $last =~ s/\\/\\\\/g;
 $last =~ s/"/\\"/g;
 $last =~ s/'/'"'"'/g;
 
-$sql .= ((length($last) == 0) or ($last eq "never")) ? ' ORDER BY timestamp DESC LIMIT 1500' : qq/ WHERE timestamp > ? ORDER BY timestamp DESC/;
+$sql .= ((length($last) == 0) or ($last eq "never")) ? ' ORDER BY timestamp DESC LIMIT 1500' : qq/ WHERE id_message > ? ORDER BY timestamp DESC/;
 
 my $sth = $dbh->prepare("SELECT * FROM ($sql) AS internaltable ORDER BY timestamp ASC;");
 if((length($last) == 0) or ($last eq "never")){
@@ -43,7 +43,7 @@ my %users;
 
 # Updates are retrieved in reverse order, so we need to flip the list.
 while(my @row = $sth->fetchrow_array()){
-	my ($timestamp, $remote_addr, $user, $message) = @row;
+	my ($id_message, $timestamp, $remote_addr, $user, $message) = @row;
 
 	my $ipcolor = "#ffffff";
 	my $iphighlight = "";
@@ -55,7 +55,7 @@ while(my @row = $sth->fetchrow_array()){
 	}
 
 	$output .= qq/{"timestamp": "$timestamp", "ipcolor": "$ipcolor"/ . ((length($iphighlight) > 0) ? qq/, "iphighlight": "$iphighlight"/ : "") . qq/, "user": "$user", "message": "$message"},\n/;
-	$last = $timestamp;
+	$last = $id_message;
 	$users{$user} = '';
 }
 
