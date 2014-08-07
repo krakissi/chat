@@ -62,8 +62,6 @@ int main(){
 	if(*s == 0)
 		return 0;
 
-	// TODO: emotes?
-
 	if(*s == '>'){
 		implying = 1;
 		if(strpbrk(s, "\r\n"))

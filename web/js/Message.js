@@ -162,6 +162,9 @@ var Message = {
 					+ '</span>]</span> <span class=message>'
 					+ msg.message + '</span></div>';
 
+			if(msg.message.match(new RegExp("<span class=hashtag>@" + Core.user, 'i')))
+				Message.mention = true;
+
 			if(batch)
 				this.batchset += formatted;
 			else this.chatbody.innerHTML += formatted;

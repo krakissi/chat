@@ -23,13 +23,20 @@ var Sound = {
 			Sound.bloop.play();
 	},
 
-	messagealert: function(){
-		if(Sound.bloop.muted === false){
+	messagealert: function(mention){
+		var snd = Sound.bloop;
+
+		if(Message.mention){
+			snd = Sound.horn;
+			Message.mention = false;
+		}
+
+		if(snd.muted === false){
 			// Chrome workaround
 			if(window.chrome)
-				Sound.bloop.load();
+				snd.load();
 
-			Sound.bloop.play();
+			snd.play();
 		}
 		Sound.mute();
 	},
