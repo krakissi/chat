@@ -23,7 +23,7 @@ var Sound = {
 			Sound.bloop.play();
 	},
 
-	messagealert: function(mention){
+	messagealert: function(){
 		var snd = Sound.bloop;
 
 		if(Message.mention){
