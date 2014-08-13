@@ -12,7 +12,7 @@ if [ $(mod_find chat:require_https) = "no" ] || [ -n "$HTTP_X_FORWARDED_FOR" ]; 
 	fi
 else
 cat <<-EOF
-	Status: 302 Please Use HTTPS
+	Status: 301 Please Use HTTPS
 	Location: https://$HTTP_HOST$REQUEST_URI
 EOF
 fi
