@@ -190,6 +190,13 @@ var Message = {
 				case "keypress":
 					Message.send();
 					break;
+				case "keyup":
+					var s = Message.message.value;
+
+					if(s.length)
+						s = s.slice(0, -1);
+					Message.message.value = s;
+					break;
 			}
 		}
 	},
