@@ -23,7 +23,10 @@ $message = qx/echo '$message' | mod_find chat:formatter/;
 $message = uri_escape($message);
 
 if(length($message) > 1024){
-	printf "Status: 400 Message Too Long\n\n";
+	printf "Status: 413 Message Too Long\n\n";
+	exit 0;
+} elsif(length($message) == 0){
+	printf "Status: 400 Message Too Short\n\n";
 	exit 0;
 }
 

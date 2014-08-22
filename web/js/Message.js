@@ -14,8 +14,10 @@ var Message = {
 	first: true,
 
 	send: function(){
-		var post = encodeURIComponent(this.message.value);
+		var om = this.message.value;
 		this.message.value = "";
+
+		var post = encodeURIComponent(om);
 
 		if(post == "")
 			return false;
@@ -32,8 +34,10 @@ var Message = {
 				if(xhr.readyState === 4){
 					if(xhr.status === 204)
 						pstate = 2;
-					else if((xhr.status >= 400) && (xhr.status < 500))
+					else if(xhr.status == 413)
 						pstate = 3;
+					else if(xhr.status == 400)
+						pstate = 4;
 					else if((xhr.status >= 500) && (xhr.status < 600))
 						pstate = -1;
 				} else pstate = 1;
@@ -46,7 +50,7 @@ var Message = {
 			},
 
 			// Original message for restoration
-			om: this.message.value
+			om: om
 		});
 
 		if(Chat.sleeping)
@@ -71,6 +75,11 @@ var Message = {
 		case 3:
 			Message.post_status.style.display = "inline";
 			Message.post_status.innerHTML = '<span style="color: red;">Message too long.</span>';
+			Message.post_status_to = setTimeout('Message.posting_status(0)', 5000);
+			break;
+		case 4:
+			Message.post_status.style.display = "inline";
+			Message.post_status.innerHTML = '<span style="color: red;">Message too short.</span>';
 			Message.post_status_to = setTimeout('Message.posting_status(0)', 5000);
 			break;
 		case -1:
