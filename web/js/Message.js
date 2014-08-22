@@ -15,6 +15,7 @@ var Message = {
 
 	send: function(){
 		var post = encodeURIComponent(this.message.value);
+		this.message.value = "";
 
 		if(post == "")
 			return false;
@@ -188,9 +189,6 @@ var Message = {
 			switch(event.type){
 				case "keypress":
 					Message.send();
-					break;
-				case "keyup":
-					Message.message.value = "";
 					break;
 			}
 		}
