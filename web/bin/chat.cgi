@@ -54,7 +54,7 @@ while(my @row = $sth->fetchrow_array()){
 		}
 	}
 
-	$output .= qq/{"timestamp": "$timestamp", "ipcolor": "$ipcolor"/ . ((length($iphighlight) > 0) ? qq/, "iphighlight": "$iphighlight"/ : "") . qq/, "user": "$user", "message": "$message"},\n/;
+	$output .= qq/{"id_message": "$id_message", "timestamp": "$timestamp", "ipcolor": "$ipcolor"/ . ((length($iphighlight) > 0) ? qq/, "iphighlight": "$iphighlight"/ : "") . qq/, "user": "$user", "message": "$message"},\n/;
 	$last = $id_message;
 	$users{$user} = '';
 }

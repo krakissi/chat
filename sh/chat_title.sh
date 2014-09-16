@@ -66,7 +66,6 @@ titles=(
 	"Krakchat (Because I haven't finished Krakden)"
 	"Krakchat (Russell, honey ...)"
 	"Krakchat (I mean, ...)"
-	"Krakchat (A Pleasant Gap)"
 	"Krakchat (On the rocks next time)"
 	"Krakchat (There was a loud report)"
 	"Krakchat (Less fun than Anthrocon)"

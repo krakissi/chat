@@ -7,6 +7,7 @@ var Message = {
 	message: undefined,
 	post_status: undefined,
 	waslocked: true,
+	id_last: -1,
 
 	truncatelength: 30000,
 	truncatemode: undefined,
@@ -137,7 +138,10 @@ var Message = {
 		if(Message.chatbody.scrollTop === (Message.chatbody.scrollHeight - Message.chatbody.offsetHeight))
 			locked = true;
 
-		if(msg.message){
+		// Do not load out of order (probably duplicate) messages.
+		if(msg.message && (msg.id_message > Message.id_last)){
+			Message.id_last = msg.id_message;
+
 			msg.message = decodeURIComponent(msg.message);
 			var tsparts = msg.timestamp.split(' ');
 			var tsdate = tsparts[0];
