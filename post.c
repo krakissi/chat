@@ -33,6 +33,14 @@ void chomp(char *str){
 		*str = 0;
 }
 
+int hashtag = 0;
+void unhash(){
+	while(hashtag > 0){
+		fputs("</span>", stdout);
+		hashtag--;
+	}
+}
+
 int main(){
 	char *str, *s, *s_a, *cmd;
 
@@ -40,7 +48,6 @@ int main(){
 	int anchor_count = 0;
 	int bold_count = 0;
 	int code_count = 0;
-	int hashtag = 0;
 	int implying = 0;
 	int inquote = 0;
 	int italic_count = 0;
@@ -72,6 +79,7 @@ int main(){
 		switch(*s_a){
 			case '\r':
 			case '\n':
+				unhash();
 				if(implying){
 					fputs("<br>", stdout);
 					if(*(s_a + 1) != '>')
@@ -82,10 +90,7 @@ int main(){
 			case '-': case ',': case ';':
 			case ':':
 			case ' ':
-				while(hashtag > 0){
-					fputs("</span>", stdout);
-					hashtag--;
-				}
+				unhash();
 				fputc(*s_a, stdout);
 				break;
 			case '#':
@@ -136,6 +141,7 @@ int main(){
 				} else fputs("\"", stdout);
 				break;
 			case '<':
+				unhash();
 				if(code_count){
 					if((cmd = strstr(s_a, "</code>")) == s_a){
 						if(code_count == 0){
