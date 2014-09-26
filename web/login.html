@@ -3,95 +3,26 @@
 	<title>Kraknet - Login</title>
 	<meta charset=utf-8>
 	<link rel=stylesheet type=text/css href=css/login.css>
-	<script type=text/javascript>
-		// Ajax.js is cry baby; it needs its Core.
-		var Core = { add: function(){} };
-
-		var username_old = "";
-		var loginmode = false;
-
-		function loginaction(){
-			var repass = document.getElementById('repass');
-			var form = document.forms['loginform'];
-
-			form.action = (loginmode || (repass.value === "")) ? 'bin/accounts/login' : 'bin/accounts/register';
-			form.submit();
-		}
-
-		function setloginmode(state){
-			if(state === undefined)
-				return;
-
-			var retype = document.getElementById('password_retype');
-			var sendbt = document.getElementById('sendbutton');
-			var repass = document.getElementById('repass');
-			if(state){
-				// Login mode
-				retype.style.display = 'none';
-				sendbt.value = 'Login';
-				loginmode = true;
-			} else {
-				// Registration mode
-				retype.style.display = 'block';
-				sendbt.value = 'Register';
-				repass.value = '';
-				loginmode = false;
-			}
-		}
-
-		function checkusername(event){
-			var name = document.getElementById('name').value;
-
-			if(name.length < 4)
-				return;
-
-			if(name != username_old){
-				var target = 'bin/exists.cgi?name=' + name;
-
-				Ajax.get({
-					target: target,
-					success: function(xhr){
-						var json = JSON.parse(xhr.responseText.trim());
-
-						if(json)
-							setloginmode(json.exists);
-					}
-				});
-			}
-
-			username_old = name;
-		}
-
-		function maybesubmit(event){
-			if((event.keyCode || event.which) == 13)
-				loginaction();
-		}
-	</script>
-	<script type=text/javascript src=js/Ajax.js></script>
-</head><body onload="checkusername(event)">
+</head><body>
 	<div id=contentpane>
+		<h2>kraknet</h2>
 		<div class=inlineblock>
-			<h2>kraknet</h2>
-			<form name=loginform method=post>
+			<h3>login</h3>
+			<form name=loginform method=post action="bin/accounts/login">
 				<input type=hidden name=onsuccess value="<????chat:loginref>">
 				<input type=hidden name=domain value="<????accounts:domain>">
 
 				<div>
 					<label for=name>username</label>
-					<input name=name id=name onkeyup="maybesubmit(event); checkusername(event)">
+					<input name=name id=name>
 				</div>
 
 				<div>
 					<label for=pass>password</label>
-					<input type=password name=pass id=pass onkeyup="maybesubmit(event)">
+					<input type=password name=pass id=pass>
 				</div>
 
-				<div id=password_retype>
-					<label for=repass>repassword</label>
-					<input type=password name=repass id=repass onkeyup="maybesubmit(event)">
-				</div>
-
-				<input type=button value="Register" id="sendbutton" onclick="loginaction(event)">
+				<input type=submit value=Login>
 			</form>
 		</div>
 
@@ -99,6 +30,31 @@
 			<p>Welcome to the new kraknet! Old krakchat accounts will <b>not</b> work; you will need to make a new one.</p>
 			<p>Usernames should be at least four characters, with any combination of lowercase letters, numbers, hyphens, and underscores.</p>
 			<p>Passwords can be anything you want, but must be at least six characters.</p>
+		</div>
+
+		<div class=inlineblock>
+			<h3>register</h3>
+			<form method=post action="bin/accounts/register">
+				<input type=hidden name=onsuccess value="<????chat:loginref>">
+				<input type=hidden name=domain value="<????accounts:domain>">
+
+				<div>
+					<label for=name>username</label>
+					<input name=name id=name>
+				</div>
+
+				<div>
+					<label for=pass>password</label>
+					<input type=password name=pass id=pass>
+				</div>
+
+				<div id=password_retype>
+					<label for=repass>repassword</label>
+					<input type=password name=repass id=repass>
+				</div>
+
+				<input type=submit value=Register>
+			</form>
 		</div>
 	</div>
 </body></html>
