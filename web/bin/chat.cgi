@@ -22,16 +22,28 @@ if(length($buffer) > 0){
 	}
 }
 
-my $sql = qq/SELECT id_message, timestamp, remote_addr, user, message FROM log/;
+# Limit queries to the last INTERVAL.
+my $sql = qq/SELECT id_message FROM log WHERE timestamp >= NOW() - INTERVAL 1 WEEK ORDER BY timestamp ASC LIMIT 1;/;
+my $sth = $dbh->prepare($sql);
+$sth->execute();
 
 my $last = $queryvals{t};
 $last =~ s/\\/\\\\/g;
 $last =~ s/"/\\"/g;
 $last =~ s/'/'"'"'/g;
 
+while(my @row = $sth->fetchrow_array()){
+	my ($minty) = @row;
+
+	if($minty > $last){
+		$last = $minty;
+	}
+}
+
+$sql = qq/SELECT id_message, timestamp, remote_addr, user, message FROM log/;
 $sql .= ((length($last) == 0) or ($last eq "never")) ? ' ORDER BY timestamp DESC LIMIT 1500' : qq/ WHERE id_message > ? ORDER BY timestamp DESC/;
 
-my $sth = $dbh->prepare("SELECT * FROM ($sql) AS internaltable ORDER BY timestamp ASC;");
+$sth = $dbh->prepare("SELECT * FROM ($sql) AS internaltable ORDER BY timestamp ASC;");
 if((length($last) == 0) or ($last eq "never")){
 	$sth->execute();
 } else {
