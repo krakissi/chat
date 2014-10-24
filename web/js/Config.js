@@ -46,8 +46,8 @@ var Config = {
 		// Login controls
 		var control_left = document.getElementById('control_left');
 		var content = this.json.user ?
-			(this.json.user + ' (<a href="bin/accounts/logout" target=_self>Logout</a>)') :
-			"<a href=login.html target=_self>Login or Register</a>";
+			(this.json.user + ' (<a href="//' + authdomain + '/logout" target=_self>Logout</a>)') :
+			'<a href="//' + authdomain + '/" target=_self>Login or Register</a>';
 		content += ' | <a class=scriptonlylink onclick="Config.toggle_preferences();">Preferences</a>';
 		control_left.innerHTML = content;
 
