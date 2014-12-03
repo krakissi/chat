@@ -157,13 +157,15 @@ var Message = {
 			if(!usercolor)
 				usercolor = 'white';
 
+			var username = (userinfo.pretty ? userinfo.pretty : msg.user);
+
 			var emote = msg.message.match(/^\/me/);
 
 			var formatted = (emote) ?
 				'<div><span class=timestamp><span class=date>'
 					+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
 					+ '</span> <span class="user' + (userhighlight ? ' ' + userhighlight : '')
-					+ '" style="color: ' + usercolor + ';">' + msg.user
+					+ '" style="color: ' + usercolor + ';">' + username
 					+ '</span> <span class="message emote' + (msg.iphighlight ? ' ' + msg.iphighlight : '')
 					+ '" style="color: ' + msg.ipcolor + ';">'
 					+ msg.message.substr(3) + '</span></div>' :
@@ -172,7 +174,7 @@ var Message = {
 					+ '</span> <span class="user_brackets' + (msg.iphighlight ? ' ' + msg.iphighlight : '')
 					+ '" style="color: ' + msg.ipcolor
 					+ ';">[<span class="user' + (userhighlight ? ' ' + userhighlight : '')
-					+ '" style="color: ' + usercolor + ';">' + msg.user
+					+ '" style="color: ' + usercolor + ';">' + username
 					+ '</span>]</span> <span class=message>'
 					+ msg.message + '</span></div>';
 

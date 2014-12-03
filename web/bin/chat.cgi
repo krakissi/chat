@@ -95,7 +95,11 @@ foreach my $user (@userlist){
 		}
 	}
 
-	$userjson .= qq/"$user": {"color": "$color"/ . ((length($highlight) > 0) ? qq/, "highlight": "$highlight"/ : "") . qq/},/;
+	my $prettyname = qx/mod_find accounts:pretty '$user'/;
+
+	$userjson .= qq/"$user": {"color": "$color"/
+		. ((length($prettyname) > 0) ? qq/, "pretty": "$prettyname"/ : "")
+		. ((length($highlight) > 0) ? qq/, "highlight": "$highlight"/ : "") . qq/},/;
 }
 $userjson =~ s/^(.*),$/\1/;
 $output = qq/{"last": "$last", "messages": [$output {}], "userlist": {$userjson}}/;
