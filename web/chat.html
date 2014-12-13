@@ -27,6 +27,21 @@
 	<script>
 		$(document).ready(function(){
 			$(document).snowfall();
+			var snow=true;
+
+			$("#toggle-snow").click(function() {
+				if(snow) {
+					$(document).snowfall('clear');
+					snow=false;
+				} else {
+					$(document).snowfall();
+					snow=true;
+				}
+			});
+
+			$("#toggle-lights").click(function() {
+				$("#lights").toggle();
+			});
 		});
 	</script>
 
@@ -56,6 +71,10 @@
 			<a href="http://imgur.com/a/Tm9HA">Best</a>
 			|
 			<a class="scriptonlylink unchecked_highlighter" onclick="Message.scrollbottom(); Title.ack();">Bottom</a>
+			|
+			<a class=scriptonlylink id='toggle-snow'>Snow</a>
+			|
+			<a class=scriptonlylink id='toggle-lights'>Lights</a>
 		</div>
 		<div id=control_left>
 			<!-- user controls, built by javascript -->
@@ -69,4 +88,6 @@
 			<input type=checkbox id=truncate_toggle>
 		</div>
 	</div>
+		<!-- Christmas shit -->
+		<div style="position: absolute; top: 0; left: 0; right: 0; height: 40px; margin: 0; padding: 0; background-image: url('lights.gif'); background-attachment: fixed; background-repeat: horizontal;" id="lights"></div>
 </body></html>
