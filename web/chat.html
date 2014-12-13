@@ -18,7 +18,18 @@
 	<!-- Auth domain, for login interactions -->
 	<script type=text/javascript>
 		var authdomain = "<????accounts:authdomain>";
+
 	</script>
+
+	<!-- Let it snow! -->
+	<script src=//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js></script>
+	<script src=js/snowfall.jquery.js></script>
+	<script>
+		$(document).ready(function(){
+			$(document).snowfall();
+		});
+	</script>
+
 </head><body onload="Core.init();">
 	<div id=chatbody>
 		Loading chatlog, please wait...
