@@ -139,7 +139,7 @@ var Message = {
 			locked = true;
 
 		// Do not load out of order (probably duplicate) messages.
-		if(msg.message && (msg.id_message > Message.id_last)){
+		if(msg.message && (parseInt(msg.id_message) > Message.id_last)){
 			Message.id_last = msg.id_message;
 
 			msg.message = decodeURIComponent(msg.message);
