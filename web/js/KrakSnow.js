@@ -11,7 +11,8 @@ var KrakSnow = {
 		maxSpeed: 4,
 		sway: 50,
 		size: 4,
-		count: 70
+		count: 70,
+		wind: 1
 	},
 	snowing: true,
 	interval: undefined,
@@ -80,6 +81,8 @@ var KrakSnow = {
 		var flakes = this.flakes;
 		var swayFactor = this.scene.sway;
 		var height = this.scene.h;
+		var width = this.scene.w;
+		var wind = this.scene.wind;
 
 		if(!flakes)
 			flakes = [];
@@ -88,32 +91,33 @@ var KrakSnow = {
 			var x = flake.cx;
 
 			x += Math.sin(flake.offset + flake.cy / 100) * flake.amplitude;
+			if(x > width)
+				x -= width;
+			else if(x < 0)
+				x += width;
 
 			return x;
 		};
 
-		var rm = [];
 		ctx.clearRect(0, 0, this.scene.w, this.scene.h);
-		flakes.forEach(function(flake, index){
+
+		var rmcount = 0;
+		flakes.forEach(function(flake, index, array){
 			// fall
 			flake.cy += flake.speed;
+			flake.cx += Math.random() * wind;
 			cx = sway(flake);
 
-			if(flake.cy > (height + flake.r * 2))
-				rm.push(index);
-			else {
+			if(flake.cy > (height + flake.r * 2)){
+				rmcount++;
+				array.splice(index, 1);
+			} else {
 				// draw
 				ctx.beginPath();
 				ctx.arc(cx, flake.cy, flake.r, 0, 2 * Math.PI);
 				ctx.fillStyle = '#ffffff';
 				ctx.fill();
 			}
-		});
-
-		// Remove each expired flake.
-		var rmcount = rm.length;
-		rm.forEach(function(index){
-			flakes.splice(index, 1);
 		});
 
 		if(rmcount)
