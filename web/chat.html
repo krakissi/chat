@@ -14,41 +14,11 @@
 	<script src=js/Message.js type=text/javascript></script>
 	<script src=js/Sound.js type=text/javascript></script>
 	<script src=js/Title.js type=text/javascript></script>
+	<script src=js/KrakSnow.js type=text/javascript></script>
 
 	<!-- Auth domain, for login interactions -->
 	<script type=text/javascript>
 		var authdomain = "<????accounts:authdomain>";
-
-	</script>
-
-	<!-- Let it snow! -->
-	<script src=//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js></script>
-	<script src=js/snowfall.jquery.js></script>
-	<script>
-		$(document).ready(function(){
-			var snow=true;
-			var settings = {
-				minSize: 1,
-				maxSize: 5,
-				round: true,
-			};
-
-			$(document).snowfall(settings);
-
-			$("#toggle-snow").click(function() {
-				if(snow) {
-					$(document).snowfall('clear');
-					snow=false;
-				} else {
-					$(document).snowfall(settings);
-					snow=true;
-				}
-			});
-
-			$("#toggle-lights").click(function() {
-				$("#lights").toggle();
-			});
-		});
 	</script>
 
 </head><body onload="Core.init();">
@@ -78,9 +48,7 @@
 			|
 			<a class="scriptonlylink unchecked_highlighter" onclick="Message.scrollbottom(); Title.ack();">Bottom</a>
 			|
-			<a class=scriptonlylink id='toggle-snow'>Snow</a>
-			|
-			<a class=scriptonlylink id='toggle-lights'>Lights</a>
+			<a class=scriptonlylink onclick="KrakSnow.toggle()">Snow</a>
 		</div>
 		<div id=control_left>
 			<!-- user controls, built by javascript -->
@@ -94,6 +62,10 @@
 			<input type=checkbox id=truncate_toggle>
 		</div>
 	</div>
-		<!-- Christmas shit -->
-		<div style="position: absolute; top: 0; left: 0; right: 0; height: 48px; margin: 0; padding: 0; background-image: url('lights.gif'); background-attachment: fixed; background-repeat: horizontal;" id="lights"></div>
+
+	<!-- Christmas shit -->
+	<div style="position: absolute; top: 0; left: 0; right: 0; height: 48px; margin: 0; padding: 0; background-image: url('lights.gif'); background-attachment: fixed; background-repeat: horizontal;" id="lights"></div>
+
+	<!-- HD 1080p SNOW BG Technology -->
+	<canvas id=snowscape height=1080 width=1920></canvas>
 </body></html>
