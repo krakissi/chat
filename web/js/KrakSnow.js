@@ -8,10 +8,10 @@ var KrakSnow = {
 		w: 1920,
 		h: 1080,
 		minSpeed: 2,
-		maxSpeed: 4,
+		maxSpeed: 5,
 		sway: 50,
 		size: 4,
-		count: 70,
+		count: 35,
 		wind: 1
 	},
 	snowing: true,
@@ -29,7 +29,7 @@ var KrakSnow = {
 			snowscape.style.display = 'block';
 			KrakSnow.interval = setInterval(function(){
 				KrakSnow.flake_update();
-			}, 1000 / 60);
+			}, 1000 / 30);
 		}
 	},
 
@@ -50,7 +50,7 @@ var KrakSnow = {
 
 		this.interval = setInterval(function(){
 			KrakSnow.flake_update();
-		}, 1000 / 60);
+		}, 1000 / 30);
 
 		document.addEventListener(Core.resizeevent.eventName, this.resize);
 	},
@@ -67,7 +67,7 @@ var KrakSnow = {
 	flake_make: function(randomY){
 		this.flakes.push({
 			cx: Math.random() * this.scene.w,
-			cy: randomY ? (Math.random() * this.scene.h) : 0,
+			cy: randomY ? (Math.random() * this.scene.h) : -this.scene.size,
 			r: Math.random() * this.scene.size,
 			speed: Math.random() * (this.scene.maxSpeed - this.scene.minSpeed) + this.scene.minSpeed,
 			offset: Math.random() * 2 * Math.PI,
@@ -106,7 +106,6 @@ var KrakSnow = {
 			// fall
 			flake.cy += flake.speed;
 			flake.cx += Math.random() * wind;
-			cx = sway(flake);
 
 			if(flake.cy > (height + flake.r * 2)){
 				rmcount++;
@@ -114,7 +113,7 @@ var KrakSnow = {
 			} else {
 				// draw
 				ctx.beginPath();
-				ctx.arc(cx, flake.cy, flake.r, 0, 2 * Math.PI);
+				ctx.arc(sway(flake), flake.cy, flake.r, 0, 2 * Math.PI);
 				ctx.fillStyle = '#ffffff';
 				ctx.fill();
 			}
