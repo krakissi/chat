@@ -11,25 +11,54 @@ var KrakSnow = {
 		maxSpeed: 5,
 		sway: 50,
 		size: 4,
-		count: 35,
+		count: 50,
 		wind: 1
 	},
 	snowing: true,
 	interval: undefined,
+	drawflag: false,
 
+	// Flip display and draw canvases.
+	flip: function(){
+		var active;
+
+		if(this.drawflag){
+			document.getElementById('snowscape').style['z-index'] = -2;
+
+			active = document.getElementById('snowscape2');
+			active.style['z-index'] = -1;
+		} else {
+			document.getElementById('snowscape2').style['z-index'] = -2;
+
+			active = document.getElementById('snowscape');
+			active.style['z-index'] = -1;
+		}
+
+		this.context = active.getContext('2d');
+		this.drawflag = !this.drawflag;
+		return active;
+	},
+
+	// Get the currently active draw surface
+	get_frame: function(getBgInstead){
+		var flag = (getBgInstead ? !this.drawflag : this.drawflag);
+
+		return document.getElementById(flag ? 'snowscape2' : 'snowscape');
+	},
+
+	// Toggle snowfall visibility and animation.
 	toggle: function(){
-		var snowscape = document.getElementById('snowscape');
+		var snowscape = KrakSnow.get_frame(false);
+		var snowscape2 = KrakSnow.get_frame(true);
 
 		if(KrakSnow.snowing){
 			KrakSnow.snowing = false;
-			snowscape.style.display = 'none';
+			snowscape.style.display = snowscape2.style.display = 'none';
 			clearInterval(KrakSnow.interval);
 		} else {
 			KrakSnow.snowing = true;
-			snowscape.style.display = 'block';
-			KrakSnow.interval = setInterval(function(){
-				KrakSnow.flake_update();
-			}, 1000 / 30);
+			snowscape.style.display = snowscape2.style.display = 'block';
+			KrakSnow.flake_update();
 		}
 	},
 
@@ -38,7 +67,7 @@ var KrakSnow = {
 			for(var k in scene)
 				this.scene[k] = scene[k];
 
-		var snowscape = document.getElementById('snowscape');
+		var snowscape = this.get_frame();
 		snowscape.width = KrakSnow.scene.w = document.documentElement.clientWidth;
 		snowscape.height = KrakSnow.scene.h = document.documentElement.clientHeight;
 
@@ -48,19 +77,22 @@ var KrakSnow = {
 		for(var i = 0; i < this.scene.count; i++)
 			this.flake_make(true);
 
-		this.interval = setInterval(function(){
-			KrakSnow.flake_update();
-		}, 1000 / 30);
+		KrakSnow.flake_update();
 
 		document.addEventListener(Core.resizeevent.eventName, this.resize);
 	},
 
 	// Adjust the canvas, based on the size of the window
 	resize: function(){
-		var snowscape = document.getElementById('snowscape');
-		
+		// Resize foreground
+		var snowscape = KrakSnow.get_frame();
 		snowscape.width = KrakSnow.scene.w = document.documentElement.clientWidth;
 		snowscape.height = KrakSnow.scene.h = document.documentElement.clientHeight;
+
+		// Resize background
+		snowscape = KrakSnow.get_frame(true);
+		snowscape.width = KrakSnow.scene.w;
+		snowscape.height = KrakSnow.scene.h;
 	},
 
 	// Produce a new random snow flake
@@ -84,6 +116,9 @@ var KrakSnow = {
 		var width = this.scene.w;
 		var wind = this.scene.wind;
 
+		if(this.interval)
+			clearTimeout(this.interval);
+
 		if(!flakes)
 			flakes = [];
 
@@ -99,7 +134,9 @@ var KrakSnow = {
 			return x;
 		};
 
-		ctx.clearRect(0, 0, this.scene.w, this.scene.h);
+		//ctx.clearRect(0, 0, this.scene.w, this.scene.h);
+		ctx.fillStyle = '#000000';
+		ctx.fillRect(0, 0, this.scene.w, this.scene.h);
 
 		var rmcount = 0;
 		flakes.forEach(function(flake, index, array){
@@ -124,6 +161,11 @@ var KrakSnow = {
 				this.flake_make();
 
 		this.flakes = flakes;
+
+		this.interval = setTimeout(function(){
+			KrakSnow.flake_update();
+			KrakSnow.flip();
+		}, 1000 / 45);
 	},
 };
 
