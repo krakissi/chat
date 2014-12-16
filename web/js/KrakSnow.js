@@ -97,13 +97,17 @@ var KrakSnow = {
 
 	// Produce a new random snow flake
 	flake_make: function(randomY){
+		var fill = parseInt(Math.random() * 0xEF + 0x10).toString(16);
+		fill = '#' + fill + fill + fill;
+
 		this.flakes.push({
 			cx: Math.random() * this.scene.w,
 			cy: randomY ? (Math.random() * this.scene.h) : -this.scene.size,
 			r: Math.random() * this.scene.size,
 			speed: Math.random() * (this.scene.maxSpeed - this.scene.minSpeed) + this.scene.minSpeed,
 			offset: Math.random() * 2 * Math.PI,
-			amplitude: Math.random() * this.scene.sway
+			amplitude: Math.random() * this.scene.sway,
+			fill: fill
 		});
 	},
 
@@ -151,7 +155,7 @@ var KrakSnow = {
 				// draw
 				ctx.beginPath();
 				ctx.arc(sway(flake), flake.cy, flake.r, 0, 2 * Math.PI);
-				ctx.fillStyle = '#ffffff';
+				ctx.fillStyle = flake.fill;
 				ctx.fill();
 			}
 		});
