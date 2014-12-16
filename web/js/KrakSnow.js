@@ -70,6 +70,7 @@ var KrakSnow = {
 		var snowscape = this.get_frame();
 		snowscape.width = KrakSnow.scene.w = document.documentElement.clientWidth;
 		snowscape.height = KrakSnow.scene.h = document.documentElement.clientHeight;
+		this.scene.count = parseInt(snowscape.width / 40);
 
 		this.context = snowscape.getContext('2d');
 		this.snowing = true;
@@ -93,6 +94,8 @@ var KrakSnow = {
 		snowscape = KrakSnow.get_frame(true);
 		snowscape.width = KrakSnow.scene.w;
 		snowscape.height = KrakSnow.scene.h;
+
+		KrakSnow.scene.count = parseInt(snowscape.width / 40);
 	},
 
 	// Produce a new random snow flake
@@ -142,16 +145,14 @@ var KrakSnow = {
 		ctx.fillStyle = '#000000';
 		ctx.fillRect(0, 0, this.scene.w, this.scene.h);
 
-		var rmcount = 0;
 		flakes.forEach(function(flake, index, array){
 			// fall
 			flake.cy += flake.speed;
 			flake.cx += Math.random() * wind;
 
-			if(flake.cy > (height + flake.r * 2)){
-				rmcount++;
+			if(flake.cy > (height + flake.r * 2))
 				array.splice(index, 1);
-			} else {
+			else {
 				// draw
 				ctx.beginPath();
 				ctx.arc(sway(flake), flake.cy, flake.r, 0, 2 * Math.PI);
@@ -160,9 +161,9 @@ var KrakSnow = {
 			}
 		});
 
-		if(rmcount)
-			while(rmcount--)
-				this.flake_make();
+		var toMake = this.scene.count - this.flakes.length;
+		while(toMake-- > 0)
+			this.flake_make();
 
 		this.flakes = flakes;
 

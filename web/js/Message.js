@@ -242,12 +242,6 @@ var Message = {
 		this.truncate();
 
 		document.addEventListener(Core.resizeevent.eventName, this.scrollbottom);
-
-		// YULE CRAP
-		document.addEventListener(Core.resizeevent.eventName, function(){
-			$("#toggle-snow").click();
-			$("#toggle-snow").click();
-		});
 	}
 };
 
