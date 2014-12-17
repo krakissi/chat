@@ -3,35 +3,68 @@ var KrakSnow = {
 
 	// An array of all the snowflakes on screen.
 	flakes: [],
+
+	// Back buffer's 2D draw context
 	context: undefined,
+
+	// Configurable parameters for the current scene.
 	scene: {
-		w: 1920,
-		h: 1080,
-		minSpeed: 2,
-		maxSpeed: 5,
+		minSpeed: 20,
+		maxSpeed: 100,
 		sway: 50,
 		size: 4,
 		count: 50,
-		wind: 1
+		wind_force: 30,
+		wind_angle: 90,
+		fps: 45
 	},
+
+	// Snowing status. Informational, do not change.
 	snowing: true,
+
+	// Interval used to queue the next frame.
 	interval: undefined,
+
+	// Which buffer is currently in use.
 	drawflag: false,
 
-	// Flip display and draw canvases.
+	// Start the blizzard! Optionally JSON object to override default parameters.
+	init: function(scene){
+		if(scene)
+			for(var k in scene)
+				this.scene[k] = scene[k];
+
+		var snowscape = this.get_frame();
+		snowscape.width = KrakSnow.scene.w = document.documentElement.clientWidth;
+		snowscape.height = KrakSnow.scene.h = document.documentElement.clientHeight;
+		this.scene.count = parseInt(snowscape.width / 20);
+
+		this.context = snowscape.getContext('2d');
+		this.snowing = true;
+
+		for(var i = 0; i < this.scene.count; i++)
+			this.flake_make(true);
+
+		KrakSnow.flake_update();
+
+		document.addEventListener(Core.resizeevent.eventName, this.resize);
+	},
+
+
+	// Flip display and draw canvases. The "active" canvas is the back buffer.
 	flip: function(){
 		var active;
 
 		if(this.drawflag){
-			document.getElementById('snowscape').style['z-index'] = -2;
+			document.getElementById('snowscape').style['z-index'] = -1;
 
 			active = document.getElementById('snowscape2');
-			active.style['z-index'] = -1;
+			active.style['z-index'] = -2;
 		} else {
-			document.getElementById('snowscape2').style['z-index'] = -2;
+			document.getElementById('snowscape2').style['z-index'] = -1;
 
 			active = document.getElementById('snowscape');
-			active.style['z-index'] = -1;
+			active.style['z-index'] = -2;
 		}
 
 		this.context = active.getContext('2d');
@@ -60,27 +93,6 @@ var KrakSnow = {
 			snowscape.style.display = snowscape2.style.display = 'block';
 			KrakSnow.flake_update();
 		}
-	},
-
-	init: function(scene){
-		if(scene)
-			for(var k in scene)
-				this.scene[k] = scene[k];
-
-		var snowscape = this.get_frame();
-		snowscape.width = KrakSnow.scene.w = document.documentElement.clientWidth;
-		snowscape.height = KrakSnow.scene.h = document.documentElement.clientHeight;
-		this.scene.count = parseInt(snowscape.width / 40);
-
-		this.context = snowscape.getContext('2d');
-		this.snowing = true;
-
-		for(var i = 0; i < this.scene.count; i++)
-			this.flake_make(true);
-
-		KrakSnow.flake_update();
-
-		document.addEventListener(Core.resizeevent.eventName, this.resize);
 	},
 
 	// Adjust the canvas, based on the size of the window
@@ -118,39 +130,51 @@ var KrakSnow = {
 	flake_update: function(){
 		var ctx = this.context;
 		var flakes = this.flakes;
-		var swayFactor = this.scene.sway;
 		var height = this.scene.h;
 		var width = this.scene.w;
-		var wind = this.scene.wind;
+		var wind_angle = this.scene.wind_angle;
+		var wind_force = this.scene.wind_force;
 
+		// Calculate how long it's been since the last frame in seconds.
+		var newTime = new Date;
+		var time = (this.lastUpdateTime ? ((newTime) - this.lastUpdateTime) : 0) / 1000;
+		this.lastUpdateTime = newTime;
+
+		// Prevent doubling by clearing the timeout.
 		if(this.interval)
 			clearTimeout(this.interval);
 
+		// No flakes at all! Create a new array.
 		if(!flakes)
 			flakes = [];
 
+		// Calculate the X-axis variance caused by sinusoidal sway.
 		var sway = function(flake){
 			var x = flake.cx;
 
 			x += Math.sin(flake.offset + flake.cy / 100) * flake.amplitude;
-			if(x > width)
-				x -= width;
-			else if(x < 0)
-				x += width;
+
+			// Wrap the flakes on the east/west edges of the screen.
+			if(x > (width + (2 * flake.r)))
+				x -= (width + (4 * flake.r));
+			else if(x < (-2 * flake.r))
+				x += width + (4 * flake.r);
 
 			return x;
 		};
 
-		//ctx.clearRect(0, 0, this.scene.w, this.scene.h);
+		// Solid background for the snow fall. This is necessary for double-buffering.
 		ctx.fillStyle = '#000000';
 		ctx.fillRect(0, 0, this.scene.w, this.scene.h);
 
+		var angle = wind_angle / 180 * Math.PI;
 		flakes.forEach(function(flake, index, array){
 			// fall
-			flake.cy += flake.speed;
-			flake.cx += Math.random() * wind;
+			flake.cy += (flake.speed + Math.cos(angle) * wind_force) * time;
+			flake.cx += (Math.random() + Math.sin(angle) * wind_force) * time;
 
 			if(flake.cy > (height + flake.r * 2))
+				// Kill off-screen flakes.
 				array.splice(index, 1);
 			else {
 				// draw
@@ -161,16 +185,20 @@ var KrakSnow = {
 			}
 		});
 
+		// Make flakes to account for those that reached the bottom and died.
 		var toMake = this.scene.count - this.flakes.length;
 		while(toMake-- > 0)
 			this.flake_make();
 
 		this.flakes = flakes;
 
+		// Show what we drew by flipping front and back buffers.
+		this.flip();
+
+		// Queue up the next frame.
 		this.interval = setTimeout(function(){
 			KrakSnow.flake_update();
-			KrakSnow.flip();
-		}, 1000 / 45);
+		}, 1000 / this.scene.fps);
 	},
 };
 
