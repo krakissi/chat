@@ -201,6 +201,10 @@ int main(){
 							fputs("<span style=\"text-decoration:line-through;\">", stdout);
 							strike_count++;
 							s_a += 7;
+						} else if((cmd = strstr(s_a, "<s>")) == s_a){
+							fputs("<span style=\"text-decoration:line-through;\">", stdout);
+							strike_count++;
+							s_a += 2;
 						} else fputs("&lt;", stdout);
 						break;
 
@@ -260,6 +264,14 @@ int main(){
 									fputs("</span>", stdout);
 									strike_count--;
 									s_a += 8;
+								} else if ((cmd = strstr(s_a, "</s>")) == s_a){
+									if(strike_count == 0){
+										fputs("&lt;", stdout);
+										continue;
+									}
+									fputs("</span>", stdout);
+									strike_count--;
+									s_a += 3;
 								} else fputs("&lt;", stdout);
 								break;
 							default:
