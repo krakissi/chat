@@ -101,7 +101,7 @@ foreach my $user (@userlist){
 		. ((length($prettyname) > 0) ? qq/, "pretty": "$prettyname"/ : "")
 		. ((length($highlight) > 0) ? qq/, "highlight": "$highlight"/ : "") . qq/},/;
 }
-$userjson =~ s/^(.*),$/\1/;
+$userjson =~ s/,$//;
 $output =~ s/,$//;
 $output = qq/{"last": "$last", "messages": [$output], "userlist": {$userjson}}/;
 
