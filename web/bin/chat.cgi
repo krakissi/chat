@@ -66,7 +66,7 @@ while(my @row = $sth->fetchrow_array()){
 		}
 	}
 
-	$output .= qq/{"id_message": "$id_message", "timestamp": "$timestamp", "ipcolor": "$ipcolor"/ . ((length($iphighlight) > 0) ? qq/, "iphighlight": "$iphighlight"/ : "") . qq/, "user": "$user", "message": "$message"},\n/;
+	$output .= qq/{"id_message": "$id_message", "timestamp": "$timestamp", "ipcolor": "$ipcolor"/ . ((length($iphighlight) > 0) ? qq/, "iphighlight": "$iphighlight"/ : "") . qq/, "user": "$user", "message": "$message"},/;
 	$last = $id_message;
 	$users{$user} = '';
 }
@@ -102,7 +102,8 @@ foreach my $user (@userlist){
 		. ((length($highlight) > 0) ? qq/, "highlight": "$highlight"/ : "") . qq/},/;
 }
 $userjson =~ s/^(.*),$/\1/;
-$output = qq/{"last": "$last", "messages": [$output {}], "userlist": {$userjson}}/;
+$output =~ s/,$//;
+$output = qq/{"last": "$last", "messages": [$output], "userlist": {$userjson}}/;
 
 if($last eq $queryvals{t}){
 print<<EOF;
