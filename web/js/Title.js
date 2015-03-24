@@ -25,7 +25,7 @@ var Title = {
 	// Message counter.
 	counter: function(){
 		if(!document.hasFocus() || !Message.waslocked)
-			Title.missedmessages += Chat.last.messages ? (Chat.last.messages.length - 1) : 1;
+			Title.missedmessages += Chat.last.messages ? Chat.last.messages.length : 0;
 		else Title.missedmessages = 0;
 
 		if(Title.missedmessages){
