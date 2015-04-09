@@ -48,6 +48,7 @@ int main(){
 	int anchor_count = 0;
 	int bold_count = 0;
 	int code_count = 0;
+	int meme_count = 0;
 	int implying = 0;
 	int inquote = 0;
 	int italic_count = 0;
@@ -196,6 +197,13 @@ int main(){
 							s_a += 2;
 						} else fputs("&lt;", stdout);
 						break;
+					case 'm':
+						if((cmd = strstr(s_a, "<meme>")) == s_a){
+							fputs("<br><span class=meme>", stdout);
+							meme_count++;
+							s_a += 5;
+						} else fputs("&lt;", stdout);
+						break;
 					case 's':
 						if((cmd = strstr(s_a, "<strike>")) == s_a){
 							fputs("<span style=\"text-decoration:line-through;\">", stdout);
@@ -255,6 +263,17 @@ int main(){
 									s_a += 3;
 								} else fputs("&lt;", stdout);
 								break;
+							case 'm':
+								if((cmd = strstr(s_a, "</meme>")) == s_a){
+									if(meme_count == 0){
+										fputs("&lt;", stdout);
+										continue;
+									}
+									fputs("</span>", stdout);
+									meme_count--;
+									s_a += 6;
+								} else fputs("&lt;", stdout);
+								break;
 							case 's':
 								if((cmd = strstr(s_a, "</strike>")) == s_a){
 									if(strike_count == 0){
@@ -296,6 +315,8 @@ int main(){
 		fputs("</span>", stdout);
 	while(italic_count-- > 0)
 		fputs("</i>", stdout);
+	while(meme_count-- > 0)
+		fputs("</span>", stdout);
 	while(strike_count-- > 0)
 		fputs("</span>", stdout);
 	while(anchor_count-- > 0)
