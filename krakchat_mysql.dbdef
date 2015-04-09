@@ -3,7 +3,7 @@ CREATE TABLE log (
   timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   remote_addr varchar(32) DEFAULT NULL,
   user varchar(256) DEFAULT NULL,
-  message varchar(2048) DEFAULT NULL
+  message varchar(64000) DEFAULT NULL
 );
 
 CREATE TABLE prefs (

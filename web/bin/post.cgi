@@ -22,7 +22,7 @@ $message =~ s/'/'"'"'/g; # Oh Bash, you so silly.
 $message = qx/echo '$message' | mod_find chat:formatter/;
 $message = uri_escape($message);
 
-if(length($message) > 1024){
+if(length($message) > 10000){
 	printf "Status: 413 Message Too Long\n\n";
 	exit 0;
 } elsif(length($message) == 0){

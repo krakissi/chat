@@ -42,7 +42,8 @@ void unhash(){
 }
 
 int main(){
-	char *str, *s, *s_a, *cmd;
+	char *str = NULL, *s, *s_a, *cmd;
+	size_t n = 0;
 
 	// Formatting counters.
 	int anchor_count = 0;
@@ -54,9 +55,8 @@ int main(){
 	int italic_count = 0;
 	int strike_count = 0;
 
-	// TODO: this should read until EOF.
 	//Read POST
-	fgets(str = calloc(2048, sizeof(char)), 2048, stdin);
+	getdelim(&str, &n, 0, stdin);
 	chomp(s = str);
 
 	//Decode
