@@ -35,6 +35,11 @@ var Chat = {
 					Chat.last = JSON.parse(e.responseText.trim());
 
 					if(Chat.last.messages){
+						setTimeout(function(){
+							for(var k in Chat.last.userlist)
+								Chat.update_color(k, Chat.last.userlist[k].color);
+						}, 0);
+
 						var batch = false;
 
 						if(Chat.last.messages.length > 25)
@@ -43,9 +48,8 @@ var Chat = {
 						if(batch)
 							Message.batch_clear();
 
-						Chat.last.messages.forEach(function(msg){
-							Message.receive(msg, batch);
-						});
+						for(var i = 0, len = Chat.last.messages.length; i < len; i++)
+							Message.receive(Chat.last.messages[i], batch);
 
 						if(batch)
 							Message.batch_commit();
@@ -129,7 +133,18 @@ var Chat = {
 		this.bottom_glowss.innerHTML = '.unchecked_highlighter { background-color: ' + (set ? 'yellow' : 'inherit') + '; }';
 	},
 
+	// Modifies (or creates) the stylesheet which sets the color for a given username.
+	update_color: function(user, value){
+		if(!Chat.userstyles[user])
+			Chat.userstyles[user] = document.body.appendChild(document.createElement('style'));
+
+		Chat.userstyles[user].innerHTML = '.user[username=' + user + ']{ color: ' + value + '; }';
+	},
+
 	init: function(){
+		// This will hold references to all of the individual user style sheets.
+		this.userstyles = {};
+
 		this.newmessage = document.createEvent("HTMLEvents");
 		this.newmessage.initEvent("Message_new", true, true);
 		this.newmessage.eventName = "Message_new";
