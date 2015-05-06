@@ -170,7 +170,7 @@ var Message = {
 				'<div><span class=timestamp><span class=date>'
 					+ tsdate + '&nbsp;</span><span class=time>' + tstime + '</span>'
 					+ '</span> <span' + username_title + ' class="user' + (userhighlight ? ' ' + userhighlight : '')
-					+ '" style="color: ' + usercolor + ';">' + username
+					+ '" style="color: ' + usercolor + ';" username="' + msg.user + '">' + username
 					+ '</span> <span class="message emote' + (msg.iphighlight ? ' ' + msg.iphighlight : '')
 					+ '" style="color: ' + msg.ipcolor + ';">'
 					+ msg.message.substr(3) + '</span></div>' :
@@ -179,7 +179,7 @@ var Message = {
 					+ '</span> <span class="user_brackets' + (msg.iphighlight ? ' ' + msg.iphighlight : '')
 					+ '" style="color: ' + msg.ipcolor
 					+ ';">[<span' + username_title + ' class="user' + (userhighlight ? ' ' + userhighlight : '')
-					+ '" style="color: ' + usercolor + ';">' + username
+					+ '" style="color: ' + usercolor + ';" username="' + msg.user + '">' + username
 					+ '</span>]</span> <span class=message>'
 					+ msg.message + '</span></div>';
 
