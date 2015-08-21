@@ -1,0 +1,212 @@
+#!/usr/bin/perl
+
+use strict;
+use JSON;
+
+my $domain = qx/mod_find accounts:domain/;
+my $msg;
+
+my $postdata = <STDIN>;
+my %postvalues;
+
+my $querystring = $ENV{QUERY_STRING};
+my %queryvalues;
+
+if(length($postdata) > 0){
+	my @pairs = split(/[;&]/, $postdata);
+	foreach my $pair (@pairs){
+		my ($name, $value) = split(/=/, $pair);
+		$value =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
+		$postvalues{$name} = $value; 
+		chomp($postvalues{$name});
+	}
+}
+if(length($querystring) > 0){
+	my @pairs = split(/[;&]/, $querystring);
+	foreach my $pair (@pairs){
+		my ($name, $value) = split(/=/, $pair);
+		$value =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
+		$queryvalues{$name} = $value; 
+		chomp($queryvalues{$name});
+	}
+}
+
+my $op = $postvalues{op};
+my $logout = $queryvalues{logout};
+
+if($logout eq "true"){
+	my $request;
+
+	$request->{op} = "logout";
+	my $json = encode_json $request;
+	$json =~s/'/'"'"'/g;
+	$json = qx/echo '$json' | mod_find accounts:api/;
+
+	&success($json);
+} elsif(!$op or (length $op == 0)){
+	# Just render the login/registration page.
+	&drawpage();
+} else {
+	# Request object for accounts API.
+	my $request;
+
+	$request->{name} = $postvalues{name};
+	$request->{pass} = $postvalues{pass};
+	$request->{domain} = $domain;
+	$request->{op} = $op;
+
+	if($op eq "register"){
+		$request->{repass} = $postvalues{repass};
+	}
+
+	my $json = encode_json $request;
+	$json =~s/'/'"'"'/g;
+	$json = qx/echo '$json' | mod_find accounts:api/;
+	$json = decode_json $json;
+
+	my $okay = $json->{success};
+
+	if($okay){
+		&success($json);
+	} else {
+		$msg->{error} = $json->{message};
+		&drawpage();
+	}
+}
+
+exit 0;
+
+sub success {
+	my $json = shift;
+	my $redir = $queryvalues{r};
+	$redir = "/" unless($redir);
+
+	# Initiate a redirect to get the user out of login land.
+	print "Status: 302 Operation Successful\n";
+	print "Location: $redir\n";
+
+	# Build the session cookie.
+	print "Set-Cookie: knetsid=$json->{sid}; Path=/;";
+	print " Domain=$domain;" if(length($json->{domain}) > 0);
+	print " Max-Age=315360000\n";
+
+	# End of Header
+	print "\n";
+}
+
+sub drawpage {
+print <<EOF;
+Content-Type: text/html; charset=utf-8
+
+<!DOCTYPE html>
+<html><head>
+	<title>Krakchat - Login</title>
+	<meta charset=utf-8>
+	<style>
+		body {
+			font-family: Ubuntu, sans-serif;
+		}
+		label {
+			font-size: 10px;
+			text-transform: uppercase;
+			cursor: pointer;
+			display: block;
+		}
+		input {
+			margin-bottom: 1em;
+		}
+
+		#contentpane {
+			width: 750px;
+			margin: 20px auto;
+		}
+
+		.inlineblock {
+			margin: 0 10px;
+			display: inline-block;
+			vertical-align: top;
+			width: 200px;
+		}
+		.inlineblock p {
+			text-align: justify;
+			text-indent: 2em;
+		}
+
+		#help {
+			width: 250px;
+		}
+
+		#error {
+			width: 100%;
+			background-color: red;
+			color: white;
+			padding: 5px 15px;
+			border-radius: 3px;
+			font-size: 200%;
+		}
+	</style>
+</head><body>
+	<div id=contentpane>
+		<h2>krakchat</h2>
+EOF
+
+if(my $err = $msg->{error}){
+	print qq{
+		<div id=error>
+			&#9888 $err
+		</div>
+	};
+}
+
+print <<EOF;
+		<div class=inlineblock>
+			<h3>login</h3>
+			<form method=post>
+				<input type=hidden name=op value=login>
+				<div>
+					<label for=name>username</label>
+					<input name=name id=name>
+				</div>
+
+				<div>
+					<label for=pass>password</label>
+					<input type=password name=pass id=pass>
+				</div>
+
+				<input type=submit value=Login>
+			</form>
+		</div>
+
+		<div id=help class=inlineblock>
+			<h3>Please Read:</h3>
+			<p>Usernames should be at least four characters, with any combination of lowercase letters, numbers, hyphens, and underscores.</p>
+			<p>Passwords can be anything you want, but must be at least six characters.</p>
+		</div>
+
+		<div class=inlineblock>
+			<h3>register</h3>
+			<form method=post>
+				<input type=hidden name=op value=register>
+
+				<div>
+					<label for=reg_name>username</label>
+					<input name=name id=reg_name>
+				</div>
+
+				<div>
+					<label for=reg_pass>password</label>
+					<input type=password name=pass id=reg_pass>
+				</div>
+
+				<div id=password_retype>
+					<label for=reg_repass>repassword</label>
+					<input type=password name=repass id=reg_repass>
+				</div>
+
+				<input type=submit value=Register>
+			</form>
+		</div>
+	</div>
+</body></html>
+EOF
+}

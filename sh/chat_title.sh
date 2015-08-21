@@ -74,6 +74,7 @@ titles=(
 	"Krakchat (Lemonbrat hoodies for everyone!)"
 	"Krakchat (Don't Go Jason Waterfalls)"
 	"Krakchat (Time for Fingerprints)"
+	"Krakchat (Apologies to Alyson)"
 )
 pick=$RANDOM
 let "pick %= ${#titles[@]}"
