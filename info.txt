@@ -4,3 +4,5 @@ title=sh/chat_title.sh
 formatter=formatter
 require_https=sh/require_https.sh
 loginref=sh/loginref.sh
+
+version=sh/versionno.sh
