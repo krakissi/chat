@@ -135,7 +135,7 @@ var Message = {
 	receive: function(msg, batch){
 		var locked = false;
 
-		if(Message.chatbody.scrollTop === (Message.chatbody.scrollHeight - Message.chatbody.offsetHeight))
+		if(Message.chatbody.scrollTop > (Message.chatbody.scrollHeight - Message.chatbody.offsetHeight - 20))
 			locked = true;
 
 		// Do not load out of order (probably duplicate) messages.
