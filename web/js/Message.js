@@ -17,6 +17,7 @@ var Message = {
 	send: function(){
 		var om = this.message.value;
 		this.message.value = "";
+		this.lastsent = om;
 
 		var post = encodeURIComponent(om);
 
@@ -205,19 +206,33 @@ var Message = {
 	keyhandler: function(event){
 		var key = event.keyCode || event.which;
 
-		if((!event.shiftKey) && (key === 13)){
-			switch(event.type){
-				case "keypress":
-					Message.send();
-					break;
-				case "keyup":
-					var s = Message.message.value;
+		switch(key){
+			case 38: // Up Arrow
+				if(Message.lastsent && Message.message.value === "")
+					Message.message.value = Message.lastsent;
+				break;
 
-					if(s.length)
-						s = s.slice(0, -1);
-					Message.message.value = s;
-					break;
-			}
+			case 40: // Down Arrow
+				if(Message.lastsent && (Message.message.value === Message.lastsent))
+					Message.message.value = "";
+				break;
+
+			case 13: // Return
+				if(!event.shiftKey){
+					switch(event.type){
+						case "keypress":
+							Message.send();
+							break;
+						case "keyup":
+							var s = Message.message.value;
+
+							if(s.length)
+								s = s.slice(0, -1);
+							Message.message.value = s;
+							break;
+					}
+				}
+				break;
 		}
 	},
 
