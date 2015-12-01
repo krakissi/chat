@@ -13,6 +13,7 @@
 </head><body onload="Core.init();">
 	<canvas id=snowscape style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none"></canvas>
 	<canvas id=snowscape2 style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none"></canvas>
+	<div style="position: absolute; top: 0; left: 0; right: 0; height: 48px; margin: 0; padding: 0; background-image: url('lights.gif'); background-attachment: fixed; background-repeat: horizontal;" id="lights_xmas"></div>
 
 	<div id=chatbody>
 		Loading chatlog, please wait...
@@ -32,6 +33,8 @@
 	<!-- Footer Controls and Info -->
 	<div id=controls>
 		<div id=control_center>
+			<a class=scriptonlylink onclick="KrakSnow.toggle()">Snow</a>
+			|
 			krak (<????time:year>)
 			|
 			<a class=scriptonlylink onclick="Chat.toggle_dates()">Dates</a>
