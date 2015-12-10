@@ -184,7 +184,7 @@ var Message = {
 					+ '</span>]</span> <span class=message>'
 					+ msg.message + '</span></div>';
 
-			if(msg.message.match(new RegExp("<span class=hashtag>@" + Core.user, 'i')))
+			if(msg.message.match(new RegExp("<span class=hashtag>@" + Core.user, 'i')) || msg.message.match(new RegExp("<span class=hashtag>@cq")))
 				Message.mention = true;
 
 			if(batch)
