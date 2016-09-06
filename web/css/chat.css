@@ -54,7 +54,8 @@ a:hover {
 }
 
 
-#preferences_window {
+#preferences_window,
+#image_picker {
 	display: none;
 	position: absolute;
 	bottom: 80px;
@@ -65,15 +66,24 @@ a:hover {
 	border: 1px solid #282a2e;
 	padding: 2px 4px 0 4px;
 }
-#preferences_window div {
+#image_picker {
+	left: inherit;
+	right: 25px;
+}
+
+#preferences_window div,
+#image_picker div {
 	padding: 0.5em 0;
 }
-#preferences_window div.submitterdiv {
+#preferences_window div.submitterdiv,
+#image_picker div.submitterdiv {
 	text-align: right;
 	width: 100%;
 }
 #preferences_window input,
-#preferences_window button {
+#preferences_window button,
+#image_picker input,
+#image_picker button {
 	border: solid 1px gray;
 	background-color: white;
 }
